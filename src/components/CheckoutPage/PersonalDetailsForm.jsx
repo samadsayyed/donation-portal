@@ -55,27 +55,27 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     }));
   };
 
-  const generateSessionId = () => {
-    const existingSessionData = localStorage.getItem("sessionIdData");
-    if (existingSessionData) {
-      const { sessionId, expiry } = JSON.parse(existingSessionData);
-      if (new Date().getTime() < expiry) {
-        return sessionId;
-      }
-    }
+  // const generateSessionId = () => {
+  //   const existingSessionData = localStorage.getItem("sessionIdData");
+  //   if (existingSessionData) {
+  //     const { sessionId, expiry } = JSON.parse(existingSessionData);
+  //     if (new Date().getTime() < expiry) {
+  //       return sessionId;
+  //     }
+  //   }
 
-    const timestamp = new Date().getTime();
-    const randomPart = Math.random().toString(36).substring(2, 15);
-    const newSessionId = `session-${timestamp}-${randomPart}`;
-    const expiryTime = timestamp + 24 * 60 * 60 * 1000;
+  //   const timestamp = new Date().getTime();
+  //   const randomPart = Math.random().toString(36).substring(2, 15);
+  //   const newSessionId = `session-${timestamp}-${randomPart}`;
+  //   const expiryTime = timestamp + 24 * 60 * 60 * 1000;
 
-    localStorage.setItem(
-      "sessionIdDatatr",
-      JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
-    );
+  //   localStorage.setItem(
+  //     "sessionIdDatatr",
+  //     JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
+  //   );
 
-    return newSessionId;
-  };
+  //   return newSessionId;
+  // };
 
   // React Query Mutation to update reference ID
   const updateReferenceId = async () => {

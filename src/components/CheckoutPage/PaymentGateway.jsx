@@ -20,32 +20,32 @@ const PaymentForm = ({
   const [error, setError] = useState(null);
   // console.log(cartItems);
 
-  const generateSessionId = () => {
-    const existingSessionData = localStorage.getItem("sessionIdData");
+  // const generateSessionId = () => {
+  //   const existingSessionData = localStorage.getItem("sessionIdData");
 
-    if (existingSessionData) {
-      const { sessionId, expiry } = JSON.parse(existingSessionData);
+  //   if (existingSessionData) {
+  //     const { sessionId, expiry } = JSON.parse(existingSessionData);
 
-      // Check if the stored session ID is still valid
-      if (new Date().getTime() < expiry) {
-        return sessionId;
-      }
-    }
+  //     // Check if the stored session ID is still valid
+  //     if (new Date().getTime() < expiry) {
+  //       return sessionId;
+  //     }
+  //   }
 
-    // Generate a new session ID if none exists or if expired
-    const timestamp = new Date().getTime();
-    const randomPart = Math.random().toString(36).substring(2, 15);
-    const newSessionId = `session-${timestamp}-${randomPart}`;
-    const expiryTime = timestamp + 24 * 60 * 60 * 1000; // 1 day in milliseconds
+  //   // Generate a new session ID if none exists or if expired
+  //   const timestamp = new Date().getTime();
+  //   const randomPart = Math.random().toString(36).substring(2, 15);
+  //   const newSessionId = `session-${timestamp}-${randomPart}`;
+  //   const expiryTime = timestamp + 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
-    // Store the new session ID and expiry in localStorage
-    localStorage.setItem(
-      "sessionIdData",
-      JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
-    );
+  //   // Store the new session ID and expiry in localStorage
+  //   localStorage.setItem(
+  //     "sessionIdData",
+  //     JSON.stringify({ sessionId: newSessionId, expiry: expiryTime })
+  //   );
 
-    return newSessionId;
-  };
+  //   return newSessionId;
+  // };
 
   const apiToken = import.meta.env.VITE_ICHARMS_API_KEY;
   const apiUrl = import.meta.env.VITE_ICHARMS_URL;
