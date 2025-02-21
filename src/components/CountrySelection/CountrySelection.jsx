@@ -5,20 +5,20 @@ import ErrorMessage from '../Error/ErrorMessage';
 import BackButton from '../common/BackButton';
 import SearchableList from '../common/SearchableList';
 import { useQuery } from '@tanstack/react-query';
-import { fetchPrograms } from '../../api/programsApi';
+import { fetchCountries } from '../../api/countiesApi';
 
-const ProgramSelection = ({ category, onSelect, onBack }) => {
+const CountrySelection = ({ category, onSelect, onBack }) => {
 
   
 
-  const {data,isLoading,isError} = useQuery({
-    queryKey: ['programs',category],
-    queryFn: fetchPrograms,
+  const {data,isLoading,isError,error} = useQuery({
+    queryKey: ['counties',category],
+    queryFn: fetchCountries,
     staleTime: 50 * 60 * 1000, // Consider data fresh for 50 minutes
     refetchInterval: 50 * 60 * 1000, // Auto-refetch every 50 minutes
   });
 
-  const programs = data?.program
+  const counties = data?.country
 
   const renderContent = () => {
     if (isLoading) {
@@ -37,17 +37,17 @@ const ProgramSelection = ({ category, onSelect, onBack }) => {
 
     return (
       <SearchableList
-        items={programs}
-        renderItem={(program) => (
+        items={counties}
+        renderItem={(country) => (
           <DonationCard
-            key={program.program_id}
-            title={program.program_name}
-            description={program.description}
-            onClick={() => onSelect(program.program_id)}
+            key={country.country_id}
+            title={country.country_name}
+            description={country.description}
+            onClick={() => onSelect(country.country_id)}
           />
         )}
-        searchKey="program_name"
-        placeholder="Search programs..."
+        searchKey="country_name"
+        placeholder="Search counties..."
       />
     );
   };
@@ -55,10 +55,10 @@ const ProgramSelection = ({ category, onSelect, onBack }) => {
   return (
     <div className="space-y-6">
       <BackButton onClick={onBack} />
-      <h2 className="text-2xl font-bold text-gray-900">Select a Program</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Select a Country</h2>
       {renderContent()}
     </div>
   );
 };
 
-export default ProgramSelection;
+export default CountrySelection;

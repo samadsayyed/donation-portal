@@ -9,7 +9,6 @@ const PaymentForm = ({ amount, setAmount, onPaymentComplete }) => {
       await processPayment(amount);
       onPaymentComplete();
     } catch (error) {
-      console.error('Payment failed:', error);
     }
   };
 

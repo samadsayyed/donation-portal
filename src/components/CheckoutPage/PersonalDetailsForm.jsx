@@ -48,7 +48,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
 
   const handlePaymentSelection = (event) => {
     const selectedPayment = event.target.id;
-    console.log("Payment method selected:", selectedPayment);
     setFormData((prev) => ({
       ...prev,
       paywith: selectedPayment,
@@ -83,7 +82,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       .fill(0)
       .map(() => "12345abcde"[Math.floor(Math.random() * 10)])
       .join("");
-    console.log("referenceId vfwerf", referenceId);
 
     try {
       const response = await axios.get(
@@ -98,7 +96,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       setReference_no(response.data.reference_id);
       return response.data.reference_id;
     } catch (err) {
-      console.error("Error in updating reference ID:", err.message);
       throw err;
     }
   };
@@ -125,7 +122,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         giftaidValue = value ? value : "N";
       }
     } catch (error) {
-      console.error("Error parsing giftaid data:", error);
     }
 
     // Get contact preferences from localStorage
@@ -141,7 +137,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         };
       }
     } catch (error) {
-      console.error("Error parsing contact preferences:", error);
     }
 
     // Create and populate FormData
@@ -168,11 +163,9 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
         }
       );
 
-      console.log("Transaction created successfully:", response.data);
       setIsSuccess(response.data.success);
       return response.data;
     } catch (error) {
-      console.error("Error in creating transaction:", error.message);
       setIsSuccess(false);
       throw error;
     }
@@ -181,13 +174,11 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
   const buyFunction = async () => {
     try {
       const response = await axios.post("http://localhost:3000/payment", {});
-      console.log(response, "response");
 
       if (response.status === 200) {
         window.location.href = response.data.url;
       }
     } catch (error) {
-      console.error("Error processing payment:", error);
     }
   };
 
@@ -209,7 +200,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
     try {
       const refId = await updateReferenceId();
 
-      console.log(refId, "refId");
 
       await updateTransaction(refId, updatedFormData);
       // await buyFunction();
@@ -217,7 +207,6 @@ const PersonalDetailsForm = ({ currentStep, setCurrentStep, setIsSuccess }) => {
       setIsPaymentGatewayOpen(true);
       // setCurrentStep(5)
     } catch (err) {
-      console.error("Error during form submission:", err);
     }
   };
 

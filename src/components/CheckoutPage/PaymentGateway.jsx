@@ -18,7 +18,6 @@ const PaymentForm = ({
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // console.log(cartItems);
 
   // const generateSessionId = () => {
   //   const existingSessionData = localStorage.getItem("sessionIdData");
@@ -120,7 +119,6 @@ const PaymentForm = ({
           session_id: JSON.parse(localStorage.getItem("sessionIdData"))?.sessionId,
         };
 
-        console.log(donationData, "donationData");
         
 
         const donationResponse = await axios.post(
@@ -133,7 +131,6 @@ const PaymentForm = ({
             }
           }
         );
-        console.log(donationResponse,"donationResponse");
         onPaymentSuccess(paymentIntent);
         setIsSuccess(true);
         setCurrentStep(4);
@@ -147,7 +144,6 @@ const PaymentForm = ({
         setIsSuccess(false);
       }
     } catch (error) {
-      console.error("Error:", error);
       setError("An error occurred during the payment process.");
     } finally {
       setLoading(false);
@@ -189,7 +185,6 @@ const PaymentForm = ({
   };
 
   useEffect(() => {
-    // console.log("PaymentForm mounted");
 
     fetchCart();
   }, []);

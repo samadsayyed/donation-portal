@@ -1,39 +1,46 @@
-import React, { useEffect } from 'react';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import toast from "react-hot-toast";
+import { createCart } from "../api/cartApi";
+import { fetchProgramRate } from "../api/programsApi";
+import CategorySelection from "../components/CategorySelection/CategorySelection";
+import CountrySelection from "../components/CountrySelection/CountrySelection";
+import ProgramSelection from "../components/ProgramSelection/ProgramSelection";
+import { useCart } from "../context/CartContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-import useLocalStorage from '../hooks/useLocalStorage';
-import CategorySelection from '../components/CategorySelection/CategorySelection';
-import ProgramSelection from '../components/ProgramSelection/ProgramSelection';
-import PaymentSection from '../components/PaymentSection/PaymentSection';
+const DonationPortal = ({ sessionId }) => {
+  const [step, setStep] = useLocalStorage("donationStep", 1);
+  const [selectedCategory, setSelectedCategory] = useLocalStorage("selectedCategory", "");
+  const [selectedProgram, setSelectedProgram] = useLocalStorage("selectedProgram", "");
+  const [selectedCountry, setSelectedCountry] = useLocalStorage("selectedCountry", "");
+  const [amount, setAmount] = useLocalStorage("donationAmount", "");
 
-const DonationPortal = () => {
-  // Use custom hook for all state that needs to persist
-  const [step, setStep] = useLocalStorage('donationStep', 1);
-  const [selectedCategory, setSelectedCategory] = useLocalStorage('selectedCategory', '');
-  const [selectedProgram, setSelectedProgram] = useLocalStorage('selectedProgram', '');
-  const [amount, setAmount] = useLocalStorage('donationAmount', '');
+  const queryClient = useQueryClient();
+  const { addToCart } = useCart();
+ 
+  const createCartMutation = useMutation({
+    mutationFn: createCart,
+    onSuccess: () => {
+      toast.success("Cart created successfully!");
+      addToCart();
+      resetDonation();
+      queryClient.invalidateQueries(["cart"]);
+    },
+    onError: (error) => toast.error(`Error creating cart: ${error.message}`),
+  });
 
-  // Reset all stored data when payment is completed
   const resetDonation = () => {
     setStep(1);
-    setSelectedCategory('');
-    setSelectedProgram('');
-    setAmount('');
-    localStorage.removeItem('donationStep');
-    localStorage.removeItem('selectedCategory');
-    localStorage.removeItem('selectedProgram');
-    localStorage.removeItem('donationAmount');
+    setSelectedCategory("");
+    setSelectedProgram("");
+    setAmount("");
+    localStorage.removeItem("donationStep");
+    localStorage.removeItem("selectedCategory");
+    localStorage.removeItem("selectedProgram");
+    localStorage.removeItem("selectedCountry");
+    localStorage.removeItem("donationAmount");
   };
-
-console.log(selectedCategory,"selectedCategory");
-
-
-  // Optional: Clean up localStorage when component unmounts
-  useEffect(() => {
-    return () => {
-      // Uncomment if you want to clear data when user leaves the page
-      // resetDonation();
-    };
-  }, []);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -45,18 +52,36 @@ console.log(selectedCategory,"selectedCategory");
     setStep(3);
   };
 
-  const handleBack = () => {
-    setStep(step - 1);
+  const handleCountrySelect = async (country) => {
+    setSelectedCountry(country);
+    try {
+      const programRate = await queryClient.fetchQuery({
+        queryKey: ["programRate"],
+        queryFn: () => fetchProgramRate(selectedCategory, selectedProgram, country),
+      });
+      if (programRate) {
+        setAmount(programRate.program_rate.program_rate);
+      }
+      createCartMutation.mutate({
+        donation_period: "one-off",
+        currency: "GBP",
+        currency_id: 1,
+        category_id: Number(selectedCategory),
+        program_id: selectedProgram,
+        country_id: selectedCountry,
+        quantity: 1,
+        donation_amount: amount,
+        donation_pound_amount: amount,
+        participant_name: "",
+        session_id: sessionId,
+      });
+    } catch (error) {
+      toast.error(`Error fetching rate: ${error.message}`);
+    }
   };
 
-  const handlePaymentComplete = () => {
-    // Handle successful payment
-    console.log('Payment completed:', {
-      category: selectedCategory,
-      program: selectedProgram,
-      amount
-    });
-    resetDonation();
+  const handleBack = () => {
+    setStep(step - 1);
   };
 
   return (
@@ -66,34 +91,28 @@ console.log(selectedCategory,"selectedCategory");
           <header className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Make a Difference</h1>
             <p className="text-gray-600">Your contribution can change lives</p>
-            
-         
           </header>
 
           {step === 1 && (
-            <CategorySelection 
-              selectedCategory={selectedCategory}
-              onSelect={handleCategorySelect}
-            />
+            <CategorySelection selectedCategory={selectedCategory} onSelect={handleCategorySelect} />
           )}
-          
           {step === 2 && (
-            <ProgramSelection 
+            <ProgramSelection
               category={selectedCategory}
               selectedProgram={selectedProgram}
               onSelect={handleProgramSelect}
               onBack={handleBack}
             />
           )}
-          
           {step === 3 && (
-            <PaymentSection 
-              amount={amount}
-              setAmount={setAmount}
+            <CountrySelection
+              category={selectedCategory}
+              selectedProgram={selectedProgram}
+              onSelect={handleCountrySelect}
               onBack={handleBack}
-              onPaymentComplete={handlePaymentComplete}
             />
           )}
+
         </div>
       </div>
     </div>

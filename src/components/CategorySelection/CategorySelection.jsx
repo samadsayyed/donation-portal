@@ -1,15 +1,22 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { fetchCategories } from '../../api/categoryApi';
 import DonationCard from '../common/DonationCard';
-import SkeletonCard from '../Loading/SkeletonCard';
-import ErrorMessage from '../Error/ErrorMessage';
-import useCategories from '../../hooks/useCategories';
 import SearchableList from '../common/SearchableList';
+import ErrorMessage from '../Error/ErrorMessage';
+import SkeletonCard from '../Loading/SkeletonCard';
 
 const CategorySelection = ({ onSelect }) => {
-  const { categories, loading, error } = useCategories();
+  const {data:categories,isLoading,isError} = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+    staleTime: 50 * 60 * 1000, // Consider data fresh for 50 minutes
+    refetchInterval: 50 * 60 * 1000, // Auto-refetch every 50 minutes
+  });
+  
 
   const renderContent = () => {
-    if (loading) {
+    if (isLoading) {
       return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((index) => (
@@ -19,7 +26,7 @@ const CategorySelection = ({ onSelect }) => {
       );
     }
 
-    if (error) {
+    if (isError) {
       return <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
     }
 
