@@ -3,9 +3,6 @@ import DonationCart from "../components/CheckoutPage/DonationCart";
 import GiftAid from "../components/CheckoutPage/Giftaid";
 import PersonalInfo from "../components/CheckoutPage/PersonalInfo";
 import StepIndicator from "../components/CheckoutPage/StepIndicator";
-import { useQuery } from "@tanstack/react-query";
-import { getCart } from "../api/cartApi";
-import useSessionId from "../hooks/useSessionId";
 
 const DonationWizard = () => {
   const [step, setStep] = useState(1);
@@ -28,7 +25,6 @@ const DonationWizard = () => {
     },
     address: { country: "", postCode: "", city: "", line1: "", line2: "" },
   });
-  const sessionId = useSessionId();
 
 
   

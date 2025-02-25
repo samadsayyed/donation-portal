@@ -25,8 +25,6 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
     ""
   );
   const [amount, setAmount] = useLocalStorage("donationAmount", "");
-  const [participant, setParticipant] = useLocalStorage("participant", "");
-  const [loading, setLoading] = useState(false);
 
   const queryClient = useQueryClient();
   const { addToCart } = useCart();
@@ -34,7 +32,6 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   const createCartMutation = useMutation({
     mutationFn: createCart,
     onMutate: () => {
-      setLoading(true);
       toast.loading("Creating cart...");
     },
     onSuccess: () => {
@@ -43,8 +40,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
       addToCart();
       resetDonation();
       // queryClient.invalidateQueries({ queryKey: ["cart"] });
-      setRender(p=>!p)
-      console.log(render,"kibihyvbkujyhvkujhvy");
+      setRender(p=>!p);
       
       setIsCartOpen(true)
     },
@@ -53,7 +49,6 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
       toast.error(`Error creating cart: ${error.message}`);
     },
     onSettled: () => {
-      setLoading(false);
     },
   });
 
@@ -91,7 +86,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
         quantity: 1,
         donation_amount: amount,
         donation_pound_amount: amount,
-        participant_name: participant,
+        participant_name: "",
         session_id: sessionId,
       };
 
@@ -128,7 +123,6 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
               category={selectedCategory}
               selectedProgram={selectedProgram}
               onBack={handleBack}
-              setParticipant={setParticipant}
               setStep={setStep}
               setSelectedProgram={setSelectedProgram}
             />

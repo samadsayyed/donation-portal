@@ -1,7 +1,7 @@
 import React from "react";
 import { Plus, Minus, Trash2 } from "lucide-react";
 
-const ItemCard = ({ item, updateQuantity, removeItem }) => (
+const ItemCard = ({ item, updateQuantity, removeItem, showParticipantInput }) => (
   <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4">
     <img src={item.program_image || "/no-image.jpg"} alt="Item" className="w-20 h-20 rounded-lg object-cover bg-gray-200" />
     <div className="flex-grow">
@@ -21,6 +21,19 @@ const ItemCard = ({ item, updateQuantity, removeItem }) => (
           <Trash2 size={16} />
         </button>
       </div>
+      
+      {showParticipantInput && (
+        <div className="mt-2 space-y-2">
+          {Array.from({ length: item.quantity }).map((_, index) => (
+            <input
+              key={`${item.cart_id}-participant-${index}`}
+              type="text"
+              placeholder={`Participant Name ${index + 1}`}
+              className="p-2 border rounded w-full"
+            />
+          ))}
+        </div>
+      )}
     </div>
     <p className="font-medium text-black">£{(item.donation_amount * item.quantity).toFixed(2)}</p>
   </div>

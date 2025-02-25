@@ -13,6 +13,8 @@ const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect }) => {
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [amountError, setAmountError] = useState('');
 
+  
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['programRate', selectedCategory, selectedCountry, selectedProgram],
     queryFn: () => fetchProgramRate(selectedCategory, selectedCountry, selectedProgram),

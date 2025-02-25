@@ -2,40 +2,41 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPafData } from "../../api/paf";
 
-export const PAFPopup = ({ show, onClose, postcode,setDonation,donation }) => {
+export const PAFPopup = ({ show, onClose, postcode, setDonation, donation }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
-    // ✅ Ensure `useQuery` is always called, even if `show` is false.
-    const { data = [], isLoading, isError, error } = useQuery({
+    // ✅ Ensure `useQuery` always runs and handles undefined data
+    const { data, isLoading, isError, error } = useQuery({
         queryKey: ["paf_data", postcode],
         queryFn: () => getPafData(postcode),
-        enabled: !!postcode, // Only fetch if postcode exists
+        enabled: !!postcode, // Fetch only if postcode exists
         refetchInterval: 300000,
     });
 
+
+    // Handle case where data is not an array or is undefined
+    const filteredAddresses = Array.isArray(data)
+        ? data.filter((address) => {
+            const fullAddress = `${address.address1 || ""} ${address.address2 || ""} ${address.post_town || ""} ${address.postcode || ""}`.toLowerCase();
+            return fullAddress.includes(searchTerm.toLowerCase());
+        })
+        : [];
+
     const handleSelectAddress = (address) => {
         setDonation((prev) => ({
-          ...prev,
-          personalInfo: {
-            ...prev.personalInfo,
-            address1: address.address1 || "",
-            address2: address.address2 || "",
-            city: address.post_town || "",
-            postcode: address.postcode || "",
-          },
+            ...prev,
+            personalInfo: {
+                ...prev.personalInfo,
+                address1: address.address1 || "",
+                address2: address.address2 || "",
+                city: address.post_town || "",
+                postcode: address.postcode || "",
+            },
         }));
-        onClose()
-      };
-      
+        onClose();
+    };
 
     if (!show) return null; // ✅ Only return null for the component, but keep hooks outside
-
-    // Filter addresses based on search input
-    const filteredAddresses = data?.filter((address) => {
-        const fullAddress = `${address.address1 || ""} ${address.address2 || ""} ${address.post_town || ""} ${address.postcode || ""}`
-            .toLowerCase();
-        return fullAddress.includes(searchTerm.toLowerCase());
-    });
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -54,9 +55,12 @@ export const PAFPopup = ({ show, onClose, postcode,setDonation,donation }) => {
                 {/* API States */}
                 {isLoading && <p className="text-gray-600">Loading addresses...</p>}
                 {isError && <p className="text-red-600">Error: {error?.message || "Failed to load data"}</p>}
+                {!isLoading && !isError && !Array.isArray(data) && (
+                    <p className="text-red-600">Invalid data format received.</p>
+                )}
 
                 {/* Address Table */}
-                {filteredAddresses?.length > 0 ? (
+                {filteredAddresses.length > 0 ? (
                     <div className="overflow-x-auto max-h-60 overflow-y-auto border rounded">
                         <table className="w-full border-collapse text-sm">
                             <thead className="bg-gray-200 sticky top-0">
@@ -96,4 +100,3 @@ export const PAFPopup = ({ show, onClose, postcode,setDonation,donation }) => {
         </div>
     );
 };
-
