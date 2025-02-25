@@ -7,14 +7,9 @@ export const fetchPrograms = async ({ queryKey }) => {
   return data;
 };
 
-export const fetchProgramRate = async (
-  selectedCategory,
-  selectedProgram,
-  selectedCountry
-) => {
-  if (!selectedProgram || !selectedCountry) return null; // Prevent unnecessary API calls
-  const response = await api.get(
-    `/program-rate/${selectedProgram}/${selectedCountry}`
-  );
-  return response.data;
+export const fetchProgramRate = async (selectedCategory, selectedCountry, selectedProgram) => {
+  if (!selectedProgram || !selectedCountry) return null;
+  const response = await api.get(`/program-rate/${selectedProgram}/${selectedCountry}`);
+  return response.data; // ✅ Return entire object, including program_rate
 };
+

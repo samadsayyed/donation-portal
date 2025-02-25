@@ -1,33 +1,60 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { createCart } from "../api/cartApi";
 import { fetchProgramRate } from "../api/programsApi";
-import CategorySelection from "../components/CategorySelection/CategorySelection";
-import CountrySelection from "../components/CountrySelection/CountrySelection";
-import ProgramSelection from "../components/ProgramSelection/ProgramSelection";
+import CategorySelection from "../components/DonationComponents/CategorySelection/CategorySelection";
+import CountrySelection from "../components/DonationComponents/CountrySelection/CountrySelection";
+import ProgramSelection from "../components/DonationComponents/ProgramSelection/ProgramSelection";
 import { useCart } from "../context/CartContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import AmountSelection from "../components/DonationComponents/AmountSelection/AmountSelection";
 
-const DonationPortal = ({ sessionId }) => {
+const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   const [step, setStep] = useLocalStorage("donationStep", 1);
-  const [selectedCategory, setSelectedCategory] = useLocalStorage("selectedCategory", "");
-  const [selectedProgram, setSelectedProgram] = useLocalStorage("selectedProgram", "");
-  const [selectedCountry, setSelectedCountry] = useLocalStorage("selectedCountry", "");
+  const [selectedCategory, setSelectedCategory] = useLocalStorage(
+    "selectedCategory",
+    ""
+  );
+  const [selectedProgram, setSelectedProgram] = useLocalStorage(
+    "selectedProgram",
+    ""
+  );
+  const [selectedCountry, setSelectedCountry] = useLocalStorage(
+    "selectedCountry",
+    ""
+  );
   const [amount, setAmount] = useLocalStorage("donationAmount", "");
+  const [participant, setParticipant] = useLocalStorage("participant", "");
+  const [loading, setLoading] = useState(false);
 
   const queryClient = useQueryClient();
   const { addToCart } = useCart();
- 
+
   const createCartMutation = useMutation({
     mutationFn: createCart,
+    onMutate: () => {
+      setLoading(true);
+      toast.loading("Creating cart...");
+    },
     onSuccess: () => {
+      toast.dismiss();
       toast.success("Cart created successfully!");
       addToCart();
       resetDonation();
-      queryClient.invalidateQueries(["cart"]);
+      // queryClient.invalidateQueries({ queryKey: ["cart"] });
+      setRender(p=>!p)
+      console.log(render,"kibihyvbkujyhvkujhvy");
+      
+      setIsCartOpen(true)
     },
-    onError: (error) => toast.error(`Error creating cart: ${error.message}`),
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(`Error creating cart: ${error.message}`);
+    },
+    onSettled: () => {
+      setLoading(false);
+    },
   });
 
   const resetDonation = () => {
@@ -47,22 +74,14 @@ const DonationPortal = ({ sessionId }) => {
     setStep(2);
   };
 
-  const handleProgramSelect = (program) => {
-    setSelectedProgram(program);
-    setStep(3);
-  };
-
   const handleCountrySelect = async (country) => {
     setSelectedCountry(country);
+    setStep(4);
+  };
+
+  const handleAmountSelect = async (amount) => {
     try {
-      const programRate = await queryClient.fetchQuery({
-        queryKey: ["programRate"],
-        queryFn: () => fetchProgramRate(selectedCategory, selectedProgram, country),
-      });
-      if (programRate) {
-        setAmount(programRate.program_rate.program_rate);
-      }
-      createCartMutation.mutate({
+      const payload = {
         donation_period: "one-off",
         currency: "GBP",
         currency_id: 1,
@@ -72,9 +91,12 @@ const DonationPortal = ({ sessionId }) => {
         quantity: 1,
         donation_amount: amount,
         donation_pound_amount: amount,
-        participant_name: "",
+        participant_name: participant,
         session_id: sessionId,
-      });
+      };
+
+      createCartMutation.mutate(payload);
+
     } catch (error) {
       toast.error(`Error fetching rate: ${error.message}`);
     }
@@ -89,19 +111,26 @@ const DonationPortal = ({ sessionId }) => {
       <div className="mx-auto max-w-4xl">
         <div className="rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl p-8">
           <header className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Make a Difference</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Make a Difference
+            </h1>
             <p className="text-gray-600">Your contribution can change lives</p>
           </header>
 
           {step === 1 && (
-            <CategorySelection selectedCategory={selectedCategory} onSelect={handleCategorySelect} />
+            <CategorySelection
+              selectedCategory={selectedCategory}
+              onSelect={handleCategorySelect}
+            />
           )}
           {step === 2 && (
             <ProgramSelection
               category={selectedCategory}
               selectedProgram={selectedProgram}
-              onSelect={handleProgramSelect}
               onBack={handleBack}
+              setParticipant={setParticipant}
+              setStep={setStep}
+              setSelectedProgram={setSelectedProgram}
             />
           )}
           {step === 3 && (
@@ -110,9 +139,19 @@ const DonationPortal = ({ sessionId }) => {
               selectedProgram={selectedProgram}
               onSelect={handleCountrySelect}
               onBack={handleBack}
+              setStep={setStep}
             />
           )}
 
+          {step === 4 && (
+            <AmountSelection
+              prevData={{ selectedCategory, selectedCountry, selectedProgram }}
+              selectedProgram={selectedProgram}
+              onSelect={handleCountrySelect}
+              onBack={handleBack}
+              handleAmountSelect={handleAmountSelect}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -5,9 +5,9 @@ import ErrorMessage from '../Error/ErrorMessage';
 import BackButton from '../common/BackButton';
 import SearchableList from '../common/SearchableList';
 import { useQuery } from '@tanstack/react-query';
-import { fetchCountries } from '../../api/countiesApi';
+import { fetchCountries } from '../../../api/countiesApi';
 
-const CountrySelection = ({ category, onSelect, onBack }) => {
+const CountrySelection = ({ category, onSelect, onBack,setStep }) => {
 
   
 
@@ -19,6 +19,8 @@ const CountrySelection = ({ category, onSelect, onBack }) => {
   });
 
   const counties = data?.country
+
+  if(counties?.length == 0) setStep(4)
 
   const renderContent = () => {
     if (isLoading) {

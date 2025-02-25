@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { fetchCategories } from '../../api/categoryApi';
+import { fetchCategories } from '../../../api/categoryApi';
 import DonationCard from '../common/DonationCard';
 import SearchableList from '../common/SearchableList';
 import ErrorMessage from '../Error/ErrorMessage';

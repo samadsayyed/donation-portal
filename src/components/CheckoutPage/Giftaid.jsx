@@ -1,96 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
+import { Mail, Phone, MessageSquare, Mailbox } from "lucide-react";
 
-const Giftaid = () => {
-  const [giftAid, setGiftAid] = useState({
-    giftAid: "N",
-  });
+const CompactGiftAid = ({preferences, setPreferences}) => {
 
-  // Load gift aid preference from local storage on mount
-  useEffect(() => {
-    const storedPreference = JSON.parse(
-      localStorage.getItem("giftAidPreference")
-    );
-    if (storedPreference) {
-      setGiftAid(storedPreference);
-    }
-  }, []);
 
-  // Save preference to local storage with expiration
-  const savePreferenceToLocalStorage = (updatedPreference) => {
-    const now = new Date();
-    const expiry = now.getTime() + 24 * 60 * 60 * 1000; // 1 day from now
-    localStorage.setItem(
-      "giftAidPreference",
-      JSON.stringify({
-        ...updatedPreference,
-        expiry,
-      })
-    );
-  };
-
-  // Handle checkbox change
-  const handleGiftAidChange = (event) => {
-    const { checked } = event.target;
-    const updatedPreference = {
-      giftAid: checked ? "Y" : "N",
-    };
-    setGiftAid(updatedPreference);
-    savePreferenceToLocalStorage(updatedPreference);
+  const toggleAll = (checked) => {
+    setPreferences((prev) => ({
+      ...prev,
+      email: checked,
+      phone: checked,
+      post: checked,
+      sms: checked,
+    }));
   };
 
   return (
-    <div className="bg-gray-100 shadow-md border text-black md:p-8 p-2 rounded-2xl mb-6">
-      <div className="flex flex-col md:flex-row justify-center items-start md:items-center mb-8">
-        {/* <h2 className="text-3xl font-semibold mb-4 md:mb-0">Gift aid</h2> */}
-        <img
-          src="/giftaid-logo-black.png"
-          alt="Gift Aid Logo"
-          className="h-12 object-contain"
-        />
+    <div className="max-w-lg mx-auto bg-white p-4 rounded-lg border border-gray-200">
+      {/* Gift Aid Section */}
+      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
+        <div className="flex-1">
+          <h2 className="font-semibold text-gray-900">
+            Boost your donation by 25%
+          </h2>
+          <p className="text-sm text-gray-600">
+            UK taxpayer? Get Gift Aid at no extra cost
+          </p>
+        </div>
+        <label className="flex items-center gap-2 ml-4">
+          <input
+            type="checkbox"
+            checked={preferences.giftAid}
+            onChange={(e) =>
+              setPreferences((prev) => ({ ...prev, giftAid: e.target.checked }))
+            }
+            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
+          />
+          <span className="text-sm font-medium">Add Gift Aid</span>
+        </label>
       </div>
 
-      <div className="space-y-6">
-        <p className="text-lg leading-relaxed">
-          If you are a UK taxpayer, the value of your gift can be increased by
-          25% under the Gift Aid schema at no extra cost to you. With Gift
-          Aid, your donation will be worth more, and it doesn't cost you a
-          penny.
-        </p>
-<div className="bg-white p-2 rounded-xl text-black text-center">  <p className="text-xl font-medium">
-          Your donation of every £1.00 can become £1.25
-        </p></div>
-      
-
-        <div className="mt-8">
-        <button className="mb-4 md:mt-0 mt-5 bg-white w-full mx-auto p-4 text-left border border-gray-500 rounded-xl">
-
-          <label className="flex items-start space-x-3">
+      {/* Communication Preferences */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-sm font-medium text-gray-900 mb-2">
+          <span>Stay updated via:</span>
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="giftAidEligible"
-              checked={giftAid.giftAid === "Y"}
-              onChange={handleGiftAidChange}
-              className="w-10 h-10 accent-[#02343F] align-middle border-2 border-black rounded-sm"
+              onChange={(e) => toggleAll(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
             />
-            <span className="text-lg text-black">
-              I am a UK taxpayer and would like Charity to reclaim tax
-              on all donations I have made within the last four years and all
-              donations that I make hereafter.
-            </span>
+            <span className="text-sm">Select all</span>
           </label>
-          </button>
         </div>
 
-        <p className="text-sm opacity-80 mt-4">
-          I understand that if I pay less Income Tax and/or Capital Gains tax
-          than the amount of Gift Aid claimed on all my donations by all the
-          charities or Community Amateur Sports Clubs (CASCs) that I donate to
-          will reclaim on my gifts for that tax (6 April to 5 April), it is my
-          responsibility to pay any difference.
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { icon: Mail, label: "Email", key: "email" },
+            { icon: Phone, label: "Phone", key: "phone" },
+            { icon: Mailbox, label: "Post", key: "post" },
+            { icon: MessageSquare, label: "SMS", key: "sms" },
+          ].map(({ icon: Icon, label, key }) => (
+            <div
+              key={key}
+              onClick={() =>
+                setPreferences((prev) => ({ ...prev, [key]: !prev[key] }))
+              }
+              className={`flex flex-col items-center p-3 rounded-lg border-[1px] border-gray-300 cursor-pointer transition-all duration-200 
+      ${
+        preferences[key]
+          ? "border-blue-600 shadow-sm shadow-blue-600 bg-blue-50"
+          : "bg-gray-50 hover:bg-gray-100"
+      }`}
+            >
+              <Icon
+                size={20}
+                className={`mb-1 transition-colors duration-200 ${
+                  preferences[key] ? "text-blue-600" : "text-gray-600"
+                }`}
+              />
+              <span className="text-xs font-medium text-gray-700">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Legal Text */}
+      <div className="mt-4 text-xs text-gray-500 space-y-1">
+        <p>
+          By checking Gift Aid, I confirm I am a UK taxpayer and understand I
+          must pay Income/Capital Gains Tax equal to the Gift Aid claimed.
+        </p>
+        <p>
+          We protect your data and use it to meet your communication
+          preferences. See our Privacy Policy for details.
+        </p>
+        <p className="text-xs text-gray-400">
+          Contact info@technoservesolutions.com to update preferences
         </p>
       </div>
     </div>
   );
 };
 
-export default Giftaid;
+export default CompactGiftAid;
