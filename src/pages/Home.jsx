@@ -1,32 +1,22 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useSearchParams } from "react-router-dom";
 import { createCart } from "../api/cartApi";
-import { fetchProgramRate } from "../api/programsApi";
+import AmountSelection from "../components/DonationComponents/AmountSelection/AmountSelection";
 import CategorySelection from "../components/DonationComponents/CategorySelection/CategorySelection";
 import CountrySelection from "../components/DonationComponents/CountrySelection/CountrySelection";
 import ProgramSelection from "../components/DonationComponents/ProgramSelection/ProgramSelection";
 import { useCart } from "../context/CartContext";
 import useLocalStorage from "../hooks/useLocalStorage";
-import AmountSelection from "../components/DonationComponents/AmountSelection/AmountSelection";
 
 const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   const [step, setStep] = useLocalStorage("donationStep", 1);
-  const [selectedCategory, setSelectedCategory] = useLocalStorage(
-    "selectedCategory",
-    ""
-  );
-  const [selectedProgram, setSelectedProgram] = useLocalStorage(
-    "selectedProgram",
-    ""
-  );
-  const [selectedCountry, setSelectedCountry] = useLocalStorage(
-    "selectedCountry",
-    ""
-  );
+  const [selectedCategory, setSelectedCategory] = useLocalStorage("selectedCategory","");
+  const [selectedProgram, setSelectedProgram] = useLocalStorage("selectedProgram","");
+  const [selectedCountry, setSelectedCountry] = useLocalStorage("selectedCountry","");
   const [amount, setAmount] = useLocalStorage("donationAmount", "");
-
-  const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
   const { addToCart } = useCart();
 
   const createCartMutation = useMutation({
@@ -100,6 +90,24 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   const handleBack = () => {
     setStep(step - 1);
   };
+
+  useEffect(() => {
+    const category = searchParams.get("category_id");
+    const program = searchParams.get("program_id");
+    const country = searchParams.get("country_id");
+    const type = searchParams.get("type");
+
+    if (category) setSelectedCategory(category);
+    if (program) setSelectedProgram(program);
+    if (country) setSelectedCountry(country);
+
+    // If all parameters exist, skip to the amount selection step
+    if (category && program && country && type === "one-off") {
+      setStep(4);
+    }
+  }, [searchParams]);
+
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">

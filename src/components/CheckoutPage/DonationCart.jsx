@@ -62,10 +62,10 @@ const DonationCart = ({ setDonation }) => {
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">
       <h2 className="text-xl font-semibold mb-6 text-black">Your Donation Cart</h2>
-      {data.map((item) => {
+      {data.map((item,index) => {
 
         return (
-          <ItemCard key={item.id} item={item} updateQuantity={updateQuantity} removeItem={removeItem} showParticipantInput={true} />
+          <ItemCard key={index} item={item} updateQuantity={updateQuantity} removeItem={removeItem} showParticipantInput={true} />
         )
       })}
       <div className="mt-6 flex justify-between items-center border-t pt-4">

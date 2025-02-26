@@ -23,6 +23,7 @@ export const PAFPopup = ({ show, onClose, postcode, setDonation, donation }) => 
         : [];
 
     const handleSelectAddress = (address) => {
+        
         setDonation((prev) => ({
             ...prev,
             personalInfo: {
