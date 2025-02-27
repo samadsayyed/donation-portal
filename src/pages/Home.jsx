@@ -56,13 +56,14 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
     if (amount) setAmount(amount)
 
     // If all parameters exist, skip to the amount selection step
-    if (category && program && country && type === "one-off") {
+    if (category && program && type === "one-off") {
+      
       setStep(4);
     }
 
-    if(category && program && country && type === "one-off"&&amount){
-      handleAmountSelect(amount)
-    }
+    // if(category && program && country && type === "one-off"&&amount){
+    //   handleAmountSelect(amount)
+    // }
   }, [searchParams]);
 
   const resetDonation = () => {
