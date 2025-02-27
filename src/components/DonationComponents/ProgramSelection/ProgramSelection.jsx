@@ -9,7 +9,6 @@ import ErrorMessage from '../Error/ErrorMessage';
 import SkeletonCard from '../Loading/SkeletonCard';
 
 const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
-  const [selectedProgramState, setSelectedProgramState] = useState(null);
 
   const { data, isLoading, isError ,error} = useQuery({
     queryKey: ['programs', category],

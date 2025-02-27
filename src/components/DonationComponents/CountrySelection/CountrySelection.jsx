@@ -7,13 +7,13 @@ import SearchableList from '../common/SearchableList';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCountries } from '../../../api/countiesApi';
 
-const CountrySelection = ({ category, onSelect, onBack,setStep }) => {
+const CountrySelection = ({ category, onSelect, onBack,setStep ,program}) => {
 
   
 
   const {data,isLoading,isError,error} = useQuery({
-    queryKey: ['counties',category],
-    queryFn: fetchCountries,
+    queryKey: ['counties',program],
+    queryFn: ()=>fetchCountries(program),
     staleTime: 50 * 60 * 1000, // Consider data fresh for 50 minutes
     refetchInterval: 50 * 60 * 1000, // Auto-refetch every 50 minutes
   });

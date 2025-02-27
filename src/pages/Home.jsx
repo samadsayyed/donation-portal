@@ -42,6 +42,29 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
     },
   });
 
+
+  useEffect(() => {
+    const category = searchParams.get("category_id");
+    const program = searchParams.get("program_id");
+    const country = searchParams.get("country_id");
+    const amount = searchParams.get("amount")
+    const type = searchParams.get("type");
+
+    if (category) setSelectedCategory(category);
+    if (program) setSelectedProgram(program);
+    if (country) setSelectedCountry(country);
+    if (amount) setAmount(amount)
+
+    // If all parameters exist, skip to the amount selection step
+    if (category && program && country && type === "one-off") {
+      setStep(4);
+    }
+
+    if(category && program && country && type === "one-off"&&amount){
+      handleAmountSelect(amount)
+    }
+  }, [searchParams]);
+
   const resetDonation = () => {
     setStep(1);
     setSelectedCategory("");
@@ -91,21 +114,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
     setStep(step - 1);
   };
 
-  useEffect(() => {
-    const category = searchParams.get("category_id");
-    const program = searchParams.get("program_id");
-    const country = searchParams.get("country_id");
-    const type = searchParams.get("type");
 
-    if (category) setSelectedCategory(category);
-    if (program) setSelectedProgram(program);
-    if (country) setSelectedCountry(country);
-
-    // If all parameters exist, skip to the amount selection step
-    if (category && program && country && type === "one-off") {
-      setStep(4);
-    }
-  }, [searchParams]);
 
   
 
@@ -129,7 +138,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
           {step === 2 && (
             <ProgramSelection
               category={selectedCategory}
-              selectedProgram={selectedProgram}
+              program={selectedProgram}
               onBack={handleBack}
               setStep={setStep}
               setSelectedProgram={setSelectedProgram}
@@ -138,7 +147,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
           {step === 3 && (
             <CountrySelection
               category={selectedCategory}
-              selectedProgram={selectedProgram}
+              program={selectedProgram}
               onSelect={handleCountrySelect}
               onBack={handleBack}
               setStep={setStep}
