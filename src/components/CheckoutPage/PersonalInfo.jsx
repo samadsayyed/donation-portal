@@ -3,7 +3,7 @@ import { CreditCard, Banknote, Building } from "lucide-react";
 import { PAFPopup } from "./PafPopup";
 import { fields } from "../../utils/data";
 
-const PersonalInfo = ({ donation, setDonation, countries }) => {
+const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPaymentGateway }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
 
@@ -24,6 +24,7 @@ const PersonalInfo = ({ donation, setDonation, countries }) => {
   };
 
   const handleSelectPaymentGateway = (gateway) => {
+    setPaymentGateway(gateway);
     setDonation((prev) => ({
       ...prev,
       paymentMethod: gateway,
@@ -54,11 +55,10 @@ const PersonalInfo = ({ donation, setDonation, countries }) => {
               onChange={handleChange}
               onFocus={() => setFocusedField(name)}
               onBlur={() => setFocusedField(null)}
-              className={`w-full rounded-lg border h-10 px-3 transition-all duration-200 ${
-                focusedField === name
+              className={`w-full rounded-lg border h-10 px-3 transition-all duration-200 ${focusedField === name
                   ? "border-black ring-2 ring-gray-200 bg-gray-50"
                   : "border-gray-200 focus:ring-black focus:border-black"
-              }`}
+                }`}
               placeholder={`Enter your ${label.toLowerCase()}`}
             />
           </div>
@@ -73,11 +73,10 @@ const PersonalInfo = ({ donation, setDonation, countries }) => {
               onChange={handleChange}
               onFocus={() => setFocusedField("country")}
               onBlur={() => setFocusedField(null)}
-              className={`w-full rounded-lg border h-10 px-3 appearance-none cursor-pointer ${
-                focusedField === "country"
+              className={`w-full rounded-lg border h-10 px-3 appearance-none cursor-pointer ${focusedField === "country"
                   ? "border-black ring-2 ring-gray-200 bg-gray-50"
                   : "border-gray-200 focus:ring-black focus:border-black"
-              }`}
+                }`}
             >
               <option value="">Select Country</option>
               {countries.map(({ country_id, country_name }) => (
@@ -103,11 +102,10 @@ const PersonalInfo = ({ donation, setDonation, countries }) => {
                 onChange={handleChange}
                 onFocus={() => setFocusedField("postcode")}
                 onBlur={() => setFocusedField(null)}
-                className={`w-full rounded-lg border h-10 px-3 transition-all duration-200 ${
-                  focusedField === "postcode"
+                className={`w-full rounded-lg border h-10 px-3 transition-all duration-200 ${focusedField === "postcode"
                     ? "border-black ring-2 ring-gray-200 bg-gray-50"
                     : "border-gray-200 focus:ring-black focus:border-black"
-                }`}
+                  }`}
                 placeholder="Enter your postal code"
               />
             </div>
@@ -124,38 +122,35 @@ const PersonalInfo = ({ donation, setDonation, countries }) => {
       <div className="mt-8">
         <label className="block text-sm font-medium text-gray-700 mb-3">Payment Gateway</label>
         <div className="flex flex-wrap gap-4">
-          <div 
+          <div
             onClick={() => handleSelectPaymentGateway("stripe")}
-            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${
-              donation.paymentMethod === "stripe" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
-            }`}
+            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${donation.paymentMethod === "stripe" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
+              }`}
           >
             <CreditCard className="text-gray-900" size={24} />
             <span className="font-medium">Stripe</span>
-            {donation.paymentMethod === "stripe" && (
+            {/* {donation.paymentMethod === "stripe" && (
               <span className="ml-2 bg-black text-white text-xs px-2 py-1 rounded-full">Default</span>
-            )}
+            )} */}
           </div>
-          
-          <div 
+
+          {/* <div
             onClick={() => handleSelectPaymentGateway("paypal")}
-            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${
-              donation.paymentMethod === "paypal" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
-            }`}
+            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${donation.paymentMethod === "paypal" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
+              }`}
           >
             <Banknote className="text-gray-900" size={24} />
             <span className="font-medium">PayPal</span>
           </div>
-          
-          <div 
+
+          <div
             onClick={() => handleSelectPaymentGateway("bank")}
-            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${
-              donation.paymentMethod === "bank" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
-            }`}
+            className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50 ${donation.paymentMethod === "bank" ? "border-black ring-1 ring-black bg-gray-50" : "border-gray-200"
+              }`}
           >
             <Building className="text-gray-900" size={24} />
             <span className="font-medium">Bank Transfer</span>
-          </div>
+          </div> */}
         </div>
       </div>
 

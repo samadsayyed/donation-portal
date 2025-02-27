@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "./axios";
 
 export const getReferenceId = async (id) => {
@@ -7,8 +8,8 @@ export const getReferenceId = async (id) => {
 
 // Function to create payment intent
 export const createPaymentIntent = async (data) => {
-  console.log(data,"-------------------");
-  
+
+
   const { amount, reference_no } = data;
   try {
     const response = await axios.post(
@@ -29,8 +30,11 @@ export const createPaymentIntent = async (data) => {
       throw new Error("Failed to create payment intent.");
     }
 
-    return response.data.clientSecret;
+
+    return response.data;
   } catch (error) {
+    console.log("error", error);
+
     throw new Error(
       error.message || "An error occurred while creating the payment intent."
     );
@@ -72,3 +76,12 @@ export const createDonation = async (paymentIntent, reference_no) => {
     );
   }
 };
+
+
+  export const createSingleDonation = async (data) => {
+    
+
+    const response = await api.post(`payment/create-single-donation`,data);
+
+    return response.data;
+  }

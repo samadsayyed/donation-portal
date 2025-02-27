@@ -6,7 +6,7 @@ import SkeletonCard from '../Loading/SkeletonCard';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProgramRate } from '../../../api/programsApi';
 
-const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect }) => {
+const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect,setStep }) => {
   const { selectedCategory, selectedCountry, selectedProgram } = prevData;
 
   const [customAmount, setCustomAmount] = useState('');
@@ -30,18 +30,16 @@ const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect }) => {
     }
   };
 
-  const handleSubmit = () => {
-    const finalAmount = selectedAmount ?? parseFloat(customAmount);
-    if (!finalAmount || finalAmount <= 0) {
-      setAmountError('Please enter a valid amount greater than 0.');
-      return;
-    }
-    onSelect(finalAmount);
-  };
+  const country = localStorage.getItem('selectedCountry');
+
+  
 
   return (
     <div className="space-y-6">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={!country ? onBack : () => {setStep(2)
+        console.log("bak clickwed");
+        
+      }} />
       <h2 className="text-2xl font-bold text-gray-900">Select or Enter an Amount</h2>
 
       {/* 🔄 Loading State */}

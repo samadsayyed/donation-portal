@@ -11,6 +11,7 @@ import useSessionId from "../hooks/useSessionId";
 import StripePayment from "../components/CheckoutPage/StripePayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import toast from "react-hot-toast";
 
 
 const DonationWizard = () => {
@@ -49,9 +50,10 @@ const DonationWizard = () => {
   const { mutate: createCartTransaction } = useMutation({
     mutationFn: cartTransaction,
     onSuccess: (data) => {
-      console.log(data,"=================");
       if(data.message == "Cart transaction has been created succesfully"){
         setIsPaymentGatewayOpen(true);
+      }else{
+        toast.error(data.message)
       }
     },
   });
@@ -77,7 +79,7 @@ const DonationWizard = () => {
       case 2:
         return <GiftAid donation={donation} setDonation={setDonation} preferences={preferences} setPreferences={setPreferences} />;
       case 3:
-        return <PersonalInfo donation={donation} setDonation={setDonation} countries={countries} />;
+        return <PersonalInfo donation={donation} setDonation={setDonation} countries={countries} paymentGateway={paymentGateway} setPaymentGateway={setPaymentGateway} />;
       default:
         return <DonationCart donation={donation} setDonation={setDonation} />;
     }
@@ -92,10 +94,9 @@ const DonationWizard = () => {
 
       {paymentGateway === "stripe" && isPaymentGatewayOpen && (
         <Elements stripe={stripePromise}>
-          <StripePayment donation={donation} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen} isPaymentGatewayOpen={isPaymentGatewayOpen} />
+          <StripePayment donation={donation} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen} isPaymentGatewayOpen={isPaymentGatewayOpen} reference_no={reference_no} />
         </Elements>
-      )}
-
+      )}  
 
       <div className="mt-6 flex justify-between">
         <button

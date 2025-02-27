@@ -150,6 +150,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
               prevData={{ selectedCategory, selectedCountry, selectedProgram }}
               selectedProgram={selectedProgram}
               onSelect={handleCountrySelect}
+              setStep={setStep}
               onBack={handleBack}
               handleAmountSelect={handleAmountSelect}
             />

@@ -8,7 +8,7 @@ export const fetchPrograms = async ({ queryKey }) => {
 };
 
 export const fetchProgramRate = async (selectedCategory, selectedCountry, selectedProgram) => {
-  if (!selectedProgram) return null;
+  if (!selectedProgram || !selectedCountry) return null;
   const response = await api.get(`/program-rate/${selectedProgram}/${selectedCountry}`);
   return response.data; // ✅ Return entire object, including program_rate
 };

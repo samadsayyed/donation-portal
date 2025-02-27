@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ItemCard from "./ItemCard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteFromCart, getCart, updateCart } from "../../api/cartApi";
@@ -15,6 +15,12 @@ const DonationCart = ({ setDonation }) => {
     enabled: !!sessionId,
     refetchInterval: 300000,
   });
+
+
+  useEffect(()=>{
+    localStorage.setItem("cart",JSON.stringify(data))
+  },[data])
+
   const quantityMutation = useMutation({
     mutationFn: updateCart,
     onMutate: () => {
