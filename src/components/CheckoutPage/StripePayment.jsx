@@ -31,7 +31,6 @@ const PaymentForm = ({
   const createDonation = useMutation({
     mutationFn: createSingleDonation,
     onMutate: () => {
-      console.log("Mutation started: createSingleDonation");
       toast.loading("Loading...");
     },
     onSuccess: () => {
@@ -75,7 +74,6 @@ const PaymentForm = ({
         return;
       }
 
-      console.log("Payment Intent confirmed:", paymentIntent);
 
       const donationData = {
         txn_id: paymentIntent.id,
@@ -90,10 +88,7 @@ const PaymentForm = ({
         // notes: "Food Packs donation for Pakistan", 
         auth: 0,
         session_id: session,
-      };
-
-      console.log(donationData,"-----+++++++++++++");
-      
+      };      
 
       createDonation.mutate(donationData)
 

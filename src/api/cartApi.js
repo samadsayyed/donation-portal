@@ -9,6 +9,8 @@ export const createCart = async (cartData) => {
 
 export const getCart = async (session_id) => {
   const res = await api.post("/cart/cart", { session_id });
+  
+
   return res.data.cart;
 };
 

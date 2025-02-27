@@ -12,6 +12,8 @@ import StripePayment from "../components/CheckoutPage/StripePayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
+import PayPalPayment from "../components/CheckoutPage/PayPalPayment";
+import { requiredFields } from "../utils/data";
 
 
 const DonationWizard = () => {
@@ -25,7 +27,7 @@ const DonationWizard = () => {
     sms: false,
   });
   const [isPaymentGatewayOpen, setIsPaymentGatewayOpen] = useState(false);
-  const [reference_no,setReference_no] = useState("")
+  const [reference_no, setReference_no] = useState("")
   const [paymentGateway, setPaymentGateway] = useState("stripe"); // Default to Stripe
   const [donation, setDonation] = useState({
     personalInfo: {
@@ -37,7 +39,7 @@ const DonationWizard = () => {
     }
   });
 
-  const stripePromise = loadStripe("pk_test_51QZ5TIP6D9LHv1Cj1DhRgOUqhSNlcoh8JOOYU77zkfmtX2g6LFKzNYkAu7j8H9qYCeHnIBgnpqfTWbb5p2WXdTsB00Yl6A05vL"); 
+  const stripePromise = loadStripe("pk_test_51QZ5TIP6D9LHv1Cj1DhRgOUqhSNlcoh8JOOYU77zkfmtX2g6LFKzNYkAu7j8H9qYCeHnIBgnpqfTWbb5p2WXdTsB00Yl6A05vL");
 
   const session = useSessionId()
 
@@ -50,9 +52,9 @@ const DonationWizard = () => {
   const { mutate: createCartTransaction } = useMutation({
     mutationFn: cartTransaction,
     onSuccess: (data) => {
-      if(data.message == "Cart transaction has been created succesfully"){
+      if (data.message == "Cart transaction has been created succesfully") {
         setIsPaymentGatewayOpen(true);
-      }else{
+      } else {
         toast.error(data.message)
       }
     },
@@ -61,14 +63,31 @@ const DonationWizard = () => {
   const { mutate: getReferenceId, isLoading, error } = useMutation({
     mutationFn: generateReferenceId,
     onSuccess: (referenceId) => {
-      setReference_no(referenceId)
-      const updatedDonation = { ...donation, referenceId ,...preferences,session};
+      setReference_no(referenceId);
+  
+      const updatedDonation = { ...donation, referenceId, ...preferences, session };
+  
+      // Required fields
+    
+  
+      // Check if any required field is missing
+      const isInvalid = requiredFields.some(field => !updatedDonation.personalInfo?.[field]);
+  
+      if (isInvalid) {
+        toast.error("Missing required fields", updatedDonation);
+        return null;
+      }
+      toast.loading()
+      
       createCartTransaction(updatedDonation);
     },
   });
+  
 
 
   const handleSubmit = () => {
+
+
     getReferenceId();
   };
 
@@ -87,7 +106,7 @@ const DonationWizard = () => {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
- 
+
       <StepIndicator step={step} />
       {getCurrentStep()}
 
@@ -96,7 +115,16 @@ const DonationWizard = () => {
         <Elements stripe={stripePromise}>
           <StripePayment donation={donation} setIsPaymentGatewayOpen={setIsPaymentGatewayOpen} isPaymentGatewayOpen={isPaymentGatewayOpen} reference_no={reference_no} />
         </Elements>
-      )}  
+      )}
+
+
+      {paymentGateway === "paypal" && isPaymentGatewayOpen && (
+        <PayPalPayment donation={donation} reference_no={reference_no} onSuccess={(details) => {
+          toast.dismiss()
+          setIsPaymentGatewayOpen(false);
+        }} />
+      )}
+
 
       <div className="mt-6 flex justify-between">
         <button

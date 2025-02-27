@@ -95,7 +95,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
         currency_id: 1,
         category_id: Number(selectedCategory),
         program_id: selectedProgram,
-        country_id: selectedCountry,
+        country_id: selectedCountry || 19,
         quantity: 1,
         donation_amount: amount,
         donation_pound_amount: amount,

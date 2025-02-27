@@ -13,8 +13,6 @@ const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect,setStep
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [amountError, setAmountError] = useState('');
 
-  
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['programRate', selectedCategory, selectedCountry, selectedProgram],
     queryFn: () => fetchProgramRate(selectedCategory, selectedCountry, selectedProgram),
@@ -36,9 +34,8 @@ const AmountSelection = ({ onBack, prevData, onSelect,handleAmountSelect,setStep
 
   return (
     <div className="space-y-6">
-      <BackButton onClick={!country ? onBack : () => {setStep(2)
-        console.log("bak clickwed");
-        
+      <BackButton onClick={!country ? onBack : () => {
+        setStep(2)
       }} />
       <h2 className="text-2xl font-bold text-gray-900">Select or Enter an Amount</h2>
 
