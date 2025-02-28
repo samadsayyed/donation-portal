@@ -39,7 +39,7 @@ const DonationWizard = () => {
     }
   });
 
-  const stripePromise = loadStripe("pk_test_51QZ5TIP6D9LHv1Cj1DhRgOUqhSNlcoh8JOOYU77zkfmtX2g6LFKzNYkAu7j8H9qYCeHnIBgnpqfTWbb5p2WXdTsB00Yl6A05vL");
+  const stripePromise = loadStripe("pk_test_51OpqyISCpAlqBVLzSBLMsm0w76Fvs0TkHkitCp7c5KFFk0DxPpVyU7do8eAJyi2SR4QAFnhNyphoteu9Yd16qswN00dQN0O2Jq");
 
   const session = useSessionId()
 
