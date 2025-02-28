@@ -51,14 +51,14 @@ export const cartTransaction = async (data) => {
   form_Data.append("reference_no", data.referenceId);
   form_Data.append("guest_details", JSON.stringify(guest_details));
   form_Data.append("payment_method", "");
-  form_Data.append("claim_donation", data.giftAid ? "Y" : "N");
+  form_Data.append("is_giftaid", data.giftAid ? "Y" : "N");
   form_Data.append("tele_calling", data.phone ? "Y" : "N");
   form_Data.append("send_email", data.email ? "Y" : "N");
   form_Data.append("send_mail", data.post ? "Y" : "N");
   form_Data.append("send_text", data.sms ? "Y" : "N");
   form_Data.append("client_id", 1);
   try {
-
+    
     // const response = await api.post(`payment/transaction`, form_Data);
 
     const response = await axios.post(
