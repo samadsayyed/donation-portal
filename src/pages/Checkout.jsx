@@ -77,7 +77,7 @@ const DonationWizard = () => {
         toast.error("Missing required fields", updatedDonation);
         return null;
       }
-      toast.loading()
+      // toast.loading()
       
       createCartTransaction(updatedDonation);
     },

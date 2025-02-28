@@ -68,15 +68,20 @@ const DonationCart = ({ setDonation }) => {
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">
       <h2 className="text-xl font-semibold mb-6 text-black">Your Donation Cart</h2>
-      {data.map((item,index) => {
-
-        return (
-          <ItemCard key={index} item={item} updateQuantity={updateQuantity} removeItem={removeItem} showParticipantInput={true} />
-        )
-      })}
-      <div className="mt-6 flex justify-between items-center border-t pt-4">
-        <p className="font-medium text-black">Total Amount:</p>
-        <p className="text-xl font-semibold text-black">£{getTotalAmount().toFixed(2)}</p>
+      {data.map((item, index) => (
+        <ItemCard
+          key={index}
+          item={item}
+          updateQuantity={updateQuantity}
+          removeItem={removeItem}
+          showParticipantInput={true}
+        />
+      ))}
+      <div className="mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center border-t pt-4">
+        <p className="font-medium text-black text-center sm:text-left">Total Amount:</p>
+        <p className="text-xl font-semibold text-black text-center sm:text-right">
+          £{getTotalAmount().toFixed(2)}
+        </p>
       </div>
     </div>
   );

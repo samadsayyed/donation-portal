@@ -115,7 +115,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-96 bg-gray-50/95 backdrop-blur-xl shadow-2xl z-50"
+            className="fixed right-0 top-0 h-full w-96 max-w-full md:w-96 bg-gray-50/95 backdrop-blur-xl shadow-2xl z-50"
           >
             <div className="flex flex-col h-full">
               {/* Header */}

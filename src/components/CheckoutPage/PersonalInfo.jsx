@@ -77,7 +77,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
       <h2 className="text-xl font-semibold mt-8 mb-4 text-black">Address Details</h2>
 
       {/* Country & Postcode in the same row */}
-      <div className="flex gap-4 items-end">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4">
         {/* Country Selection */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>

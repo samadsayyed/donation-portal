@@ -8,7 +8,7 @@ const steps = [
 ];
 
 const StepIndicator = ({ step }) => (
-  <div className="flex justify-center items-center gap-4 mb-8">
+  <div className="flex justify-center items-center gap-4 mb-8 flex-wrap sm:flex-nowrap">
     {steps.map((s) => (
       <div key={s.number} className="flex items-center">
         <div
@@ -18,7 +18,7 @@ const StepIndicator = ({ step }) => (
         >
           {s.number}
         </div>
-        <span className="ml-2 text-sm font-medium text-gray-900">{s.title}</span>
+        <span className="ml-2 text-sm font-medium text-gray-900 hidden sm:inline">{s.title}</span>
         {s.number < steps.length && <ChevronRight className="ml-2 text-gray-400" size={16} />}
       </div>
     ))}
