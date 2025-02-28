@@ -54,6 +54,7 @@ const DonationWizard = () => {
     mutationFn: cartTransaction,
     onSuccess: (data) => {
       if (data.message == "Cart transaction has been created succesfully") {
+        toast.dismiss()
         setIsPaymentGatewayOpen(true);
       } else {
         toast.error(data.message)
@@ -79,7 +80,7 @@ const DonationWizard = () => {
         return null;
       }
       // toast.loading()
-      
+      toast.loading("processing")
       createCartTransaction(updatedDonation);
     },
   });
