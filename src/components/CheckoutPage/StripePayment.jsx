@@ -80,7 +80,7 @@ const PaymentForm = ({
       const userData = localStorage.getItem("userData");
       if (userData) {
         const encryptedData = encryptData(userData);
-        navigate(`/success?data=${encodeURIComponent(encryptedData)}`);
+        navigate(`/success/${encodeURIComponent(encryptedData)}`);
       }
     },
     onError: (error) => {

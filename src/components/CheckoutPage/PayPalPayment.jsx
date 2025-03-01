@@ -10,7 +10,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
   const session = useSessionId();
   const navigate = useNavigate();
 
-  
+
 
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -28,7 +28,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
       const userData = localStorage.getItem("userData");
       if (userData) {
         const encryptedData = encryptData(userData);
-        navigate(`/success?data=${encodeURIComponent(encryptedData)}`);
+        navigate(`/success/${encodeURIComponent(encryptedData)}`);
       }
       onSuccess();
     },
