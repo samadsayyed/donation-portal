@@ -36,7 +36,8 @@ const PayPalPayment = ({ donation, reference_no, onSuccess }) => {
   });
 
   return (
-    <PayPalScriptProvider options={{ "client-id": "Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p" }}>
+    // <PayPalScriptProvider options={{ "client-id": "Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p",currency:"GBP" }}>
+    <PayPalScriptProvider options={{ "client-id": "AQhpaF4siwgu44bvNCEKuROnWnhFLjIEfogaBFEl2FFdECmWPebZsgVxEBImGi8R2Ed26P7jAy2UgBeI",currency:"GBP" }}>
       <div className="mt-4">
         <PayPalButtons
           createOrder={(data, actions) => {

@@ -91,8 +91,7 @@ const DonationCart = ({ setDonation }) => {
     });
   };
 
-  const getTotalAmount = () =>
-    data.reduce((sum, item) => sum + item.donation_amount * item.quantity, 0);
+  const getTotalAmount = () =>data.reduce((sum, item) => sum + item.donation_amount * item.quantity, 0);
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">
