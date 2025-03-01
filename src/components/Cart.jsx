@@ -70,7 +70,7 @@ const Cart = ({isOpen, setIsOpen,render,setRender}) => {
           setIsOpen(true);
           refetch();
         }}
-        className="px-4 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
+        className="px-4 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors z-50"
       >
         <ShoppingCart />
       </button>

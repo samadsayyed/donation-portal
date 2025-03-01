@@ -4,10 +4,13 @@ import toast from "react-hot-toast";
 import { createSingleDonation } from "../../api/donationApi";
 import useSessionId from "../../hooks/useSessionId";
 import { useNavigate } from "react-router-dom";
+import { encryptData } from "../../utils/functions";
 
-const PayPalPayment = ({ donation, reference_no, onSuccess }) => {
+const PayPalPayment = ({ reference_no, onSuccess }) => {
   const session = useSessionId();
   const navigate = useNavigate();
+
+  
 
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -22,7 +25,11 @@ const PayPalPayment = ({ donation, reference_no, onSuccess }) => {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Donation successful!");
-      navigate("/");
+      const userData = localStorage.getItem("userData");
+      if (userData) {
+        const encryptedData = encryptData(userData);
+        navigate(`/success?data=${encodeURIComponent(encryptedData)}`);
+      }
       onSuccess();
     },
     onError: (error) => {
@@ -36,7 +43,14 @@ const PayPalPayment = ({ donation, reference_no, onSuccess }) => {
   });
 
   return (
+    // stage 
     // <PayPalScriptProvider options={{ "client-id": "Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p",currency:"GBP" }}>
+    
+    // live zobia 
+    /* <PayPalScriptProvider options={{ "client-id": "Ad1m3eq6LrnYS4tb_V91bw753AMRV_-8CrioEHXvlS34vD5LrpG06w13ucpA_Tcw1FNBD7GxdFjOPZym",currency:"GBP" }}> */
+    
+    
+    // sandbox zobia 
     <PayPalScriptProvider options={{ "client-id": "AQhpaF4siwgu44bvNCEKuROnWnhFLjIEfogaBFEl2FFdECmWPebZsgVxEBImGi8R2Ed26P7jAy2UgBeI",currency:"GBP" }}>
       <div className="mt-4">
         <PayPalButtons

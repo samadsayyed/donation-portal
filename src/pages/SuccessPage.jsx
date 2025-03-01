@@ -1,45 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Home, Gift } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Gift, Home } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { decryptData } from '../utils/functions';
 
 const PaymentSuccessPage = () => {
   const [countdown, setCountdown] = useState(20);
   const [showConfetti, setShowConfetti] = useState(true);
+const {data} = useParams()
+  
+console.log(data,"============================");
+
+const parsedData = JSON.parse(decryptData(data));
+
+console.log(parsedData,"+++++");
+
+
   
   // Mock data - in a real app, this would come from props or context
-  const [userData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "(123) 456-7890",
-    address: "123 Main St, Anytown, USA",
+  const userData = {
+    name: parsedData.personalInfo.firstName + " "+ parsedData.personalInfo.lastName,
+    email: parsedData.personalInfo.email ,
+    phone: parsedData.personalInfo.phone,
+    address:`${parsedData.personalInfo.address1}, ${parsedData.personalInfo.address2}, ${parsedData.personalInfo.city}, ${parsedData.personalInfo.postcode}, ${parsedData.personalInfo.country}`,
     program: "Premium Membership",
     amount: "$99.99"
-  });
+  };
 
-  useEffect(() => {
-    // Redirect after 20 seconds
-    const timer = setInterval(() => {
-      setCountdown(prevCount => {
-        if (prevCount <= 1) {
-          clearInterval(timer);
-          // In a real app, replace with your routing logic
-          console.log("Redirecting to home...");
-          // window.location.href = "/";
-        }
-        return prevCount - 1;
-      });
-    }, 1000);
-
-    // Hide confetti after 8 seconds
-    const confettiTimer = setTimeout(() => {
-      setShowConfetti(false);
-    }, 8000);
-
-    return () => {
-      clearInterval(timer);
-      clearTimeout(confettiTimer);
-    };
-  }, []);
 
   // Motion variants for animations
   const pageTransition = {
@@ -322,45 +309,7 @@ const ActionButtons = () => {
   );
 };
 
-// Countdown timer with animated circle
-const CountdownTimer = ({ countdown }) => {
-  // Calculate the percentage for the countdown timer
-  const percentage = ((20 - countdown) / 20) * 100;
-  
-  return (
-    <motion.div 
-      className="mt-6 text-center relative"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 3.6 }}
-    >
-      <div className="inline-block relative">
-        <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center">
-          <svg width="64" height="64" viewBox="0 0 64 64" className="absolute top-0 left-0">
-            <motion.circle
-              cx="32"
-              cy="32"
-              r="30"
-              fill="none"
-              stroke="black"
-              strokeWidth="4"
-              strokeDasharray="188.5"
-              strokeDashoffset="188.5"
-              initial={{ strokeDashoffset: 188.5 }}
-              animate={{ strokeDashoffset: 188.5 - (188.5 * percentage / 100) }}
-              transition={{ duration: 0.5, ease: "linear" }}
-              transform="rotate(-90 32 32)"
-            />
-          </svg>
-          <motion.span className="relative z-10 font-medium text-black">
-            {countdown}
-          </motion.span>
-        </div>
-        <p className="text-gray-500 text-sm mt-2">Redirecting to home</p>
-      </div>
-    </motion.div>
-  );
-};
+
 
 // Background subtle animations
 const BackgroundAnimation = () => {

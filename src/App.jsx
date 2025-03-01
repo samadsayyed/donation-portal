@@ -9,6 +9,7 @@ import Cart from './components/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import { useState } from 'react';
 import Header from './components/Header.jsx';
+import PaymentSuccessPage from './pages/SuccessPage.jsx';
 
 function App() {
   const queryClient = new QueryClient();
@@ -27,7 +28,8 @@ function App() {
            
             <Route path="/" element={<Home sessionId={sessionId} isCartOpen={isOpen} setIsCartOpen={setIsOpen} render={render} setRender={setRender} />} />
             <Route path="/checkout" element={<Checkout  />} />
-            <Route path="/test" element={<Test sessionId={sessionId} />} />
+            {/* <Route path="/test" element={<Test sessionId={sessionId} />} /> */}
+            <Route path='/success/:data' element={<PaymentSuccessPage/>}/>
           </Routes>
         </BrowserRouter>
       </CartProvider>

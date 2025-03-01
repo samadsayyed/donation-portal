@@ -68,10 +68,10 @@ const DonationWizard = () => {
       setReference_no(referenceId);
   
       const updatedDonation = { ...donation, referenceId, ...preferences, session };
-  
-      // Required fields
-    
-  
+
+      const cart = JSON.parse(localStorage.getItem("cart"))
+      localStorage.setItem("userData",JSON.stringify({...donation,cart}));
+      
       // Check if any required field is missing
       const isInvalid = requiredFields.some(field => !updatedDonation.personalInfo?.[field]);
   
@@ -88,8 +88,6 @@ const DonationWizard = () => {
 
 
   const handleSubmit = () => {
-
-
     getReferenceId();
   };
 

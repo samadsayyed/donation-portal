@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useSessionId from "../../hooks/useSessionId";
 import { useNavigate } from "react-router-dom";
+import { encryptData } from "../../utils/functions";
 
 // ISO 3166-1 alpha-2 country codes
 const countryCodes = [
@@ -71,12 +72,16 @@ const PaymentForm = ({
       toast.success("Thank you for your donation!");
       setLoading(false);
       localStorage.removeItem("cart");
-      
+
       // Use the success callbacks if provided
       if (setIsSuccess) setIsSuccess(true);
       if (onPaymentSuccess) onPaymentSuccess();
-      
-      navigate("/donation-success");
+
+      const userData = localStorage.getItem("userData");
+      if (userData) {
+        const encryptedData = encryptData(userData);
+        navigate(`/success?data=${encodeURIComponent(encryptedData)}`);
+      }
     },
     onError: (error) => {
       console.error("Error creating donation:", error);
@@ -115,7 +120,7 @@ const PaymentForm = ({
       // Get country name for display purposes
       const selectedCountry = countryCodes.find(c => c.code === address.country);
       const countryName = selectedCountry ? selectedCountry.name : address.country;
-      
+
       // Format address for storage
       const formattedAddress = [
         address.line1,
@@ -189,11 +194,11 @@ const PaymentForm = ({
       setLoading(false);
       return;
     }
-    
+
     // Get country name for display purposes
     const selectedCountry = countryCodes.find(c => c.code === address.country);
     const countryName = selectedCountry ? selectedCountry.name : address.country;
-    
+
     // Format address for API request
     const formattedAddress = [
       address.line1,
@@ -228,7 +233,7 @@ const PaymentForm = ({
         {/* Left Section - Order Summary */}
         <div className="h-full p-6 md:p-12 flex flex-col">
           <div className="flex items-center gap-4 mb-8">
-            <button 
+            <button
               className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
               onClick={handleClose}
               aria-label="Go back"
@@ -237,10 +242,10 @@ const PaymentForm = ({
             </button>
             {/* <span className="px-3 py-1 text-sm bg-orange-500 rounded-md text-white font-medium">TEST MODE</span> */}
           </div>
-          
+
           <div className="flex-grow flex flex-col text-white">
             <h2 className="text-2xl font-bold mb-6">Donation Summary</h2>
-            
+
             <div className="flex flex-col space-y-4 mb-8">
               {cartItems.map((item, index) => (
                 <div key={index} className="bg-gray-800 rounded-lg p-4">
@@ -254,7 +259,7 @@ const PaymentForm = ({
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-auto">
               <div className="border-t border-gray-700 pt-4 mb-4">
                 <div className="flex justify-between text-lg">
@@ -271,37 +276,37 @@ const PaymentForm = ({
         <div className="bg-white h-full overflow-y-auto">
           <div className="max-w-xl mx-auto p-2 md:p-8">
             <h1 className="text-2xl font-bold mb-8">Complete Your Donation</h1>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Personal Information */}
-<div className="bg-gray-50 px-6 rounded-lg">
-  <h2 className="text-lg font-semibold mb-4">Personal Information</h2>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
-      <input
-        id="name"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
-        required
-      />
-    </div>
 
-    <div>
-      <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
-      <input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
-        required
-      />
-    </div>
-  </div>
-</div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Personal Information */}
+              <div className="bg-gray-50 px-6 rounded-lg">
+                <h2 className="text-lg font-semibold mb-4">Personal Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
+                    <input
+                      id="name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
 
               {/* Billing Address */}
               <div className="bg-gray-50 px-6 rounded-lg">
@@ -318,7 +323,7 @@ const PaymentForm = ({
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="line2" className="block text-sm font-medium mb-1">Address Line 2 (Optional)</label>
                     <input
@@ -329,7 +334,7 @@ const PaymentForm = ({
                       className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="city" className="block text-sm font-medium mb-1">City</label>
@@ -342,7 +347,7 @@ const PaymentForm = ({
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <label htmlFor="state" className="block text-sm font-medium mb-1">State/Province</label>
                       <input
@@ -355,7 +360,7 @@ const PaymentForm = ({
                       />
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="postalCode" className="block text-sm font-medium mb-1">Postal Code</label>
@@ -368,7 +373,7 @@ const PaymentForm = ({
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <label htmlFor="country" className="block text-sm font-medium mb-1">Country</label>
                       <select
@@ -389,14 +394,14 @@ const PaymentForm = ({
                   </div>
                 </div>
               </div>
-              
+
               {/* Payment Information */}
               <div className="bg-gray-50 px-6 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Payment Information</h2>
                 <div>
                   <label htmlFor="card-element" className="block text-sm font-medium mb-1">Credit or debit card</label>
                   <div className="border border-gray-300 rounded-md p-4 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
-                    <CardElement 
+                    <CardElement
                       id="card-element"
                       options={{
                         style: {
@@ -414,7 +419,7 @@ const PaymentForm = ({
                       }}
                     />
                   </div>
-                  
+
                   {error && (
                     <div className="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded border border-red-200">
                       {error}
@@ -422,7 +427,7 @@ const PaymentForm = ({
                   )}
                 </div>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={loading || !stripe}
@@ -430,7 +435,7 @@ const PaymentForm = ({
               >
                 {loading ? "Processing..." : `Donate $${totalAmount.toFixed(2)}`}
               </button>
-              
+
               <p className="text-sm text-gray-500 text-center mt-4">
                 Your donation is securely processed by Stripe. Your card details are encrypted and never stored on our servers.
               </p>
