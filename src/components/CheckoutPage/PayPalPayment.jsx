@@ -14,8 +14,16 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
 
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const amount = cartItems
+    .reduce((total, item) => total + parseFloat(item.donation_amount) * item.quantity, 0)
+    .toFixed(2);
 
-  const totalAmount = cartItems.reduce((total, item) => total + item.donation_amount * item.quantity,0).toFixed(2);
+  const checkTransitionFee = JSON.parse(localStorage.getItem("donationPreferences"))?.coverFee || false;
+
+  const totalAmount = Number(checkTransitionFee
+    ? (parseFloat(amount) * 1.0125).toFixed(2) // Adding 1.25% transaction fee
+    : amount);
+
 
   const createDonation = useMutation({
     mutationFn: createSingleDonation,
@@ -46,13 +54,13 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
   return (
     // stage 
     // <PayPalScriptProvider options={{ "client-id": "Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p",currency:"GBP" }}>
-    
+
     // live zobia 
     /* <PayPalScriptProvider options={{ "client-id": "Ad1m3eq6LrnYS4tb_V91bw753AMRV_-8CrioEHXvlS34vD5LrpG06w13ucpA_Tcw1FNBD7GxdFjOPZym",currency:"GBP" }}> */
-    
-    
+
+
     // sandbox zobia 
-    <PayPalScriptProvider options={{ "client-id": "AQhpaF4siwgu44bvNCEKuROnWnhFLjIEfogaBFEl2FFdECmWPebZsgVxEBImGi8R2Ed26P7jAy2UgBeI",currency:"GBP" }}>
+    <PayPalScriptProvider options={{ "client-id": "AQhpaF4siwgu44bvNCEKuROnWnhFLjIEfogaBFEl2FFdECmWPebZsgVxEBImGi8R2Ed26P7jAy2UgBeI", currency: "GBP" }}>
       <div className="mt-4">
         <PayPalButtons
           createOrder={(data, actions) => {
@@ -68,7 +76,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
           }}
           onApprove={(data, actions) => {
             return actions.order.capture().then((details) => {
-              toast.success("Payment successful!",details);
+              toast.success("Payment successful!", details);
 
               const donationData = {
                 txn_id: details.id,

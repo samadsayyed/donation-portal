@@ -71,11 +71,11 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
               <div
                 key={amount}
                 onClick={() => handleAmountClick(amount)}
-                className={`cursor-pointer rounded-lg border p-3 text-center transition-all ${
-                  selectedAmount === amount ? 'border-secondary bg-secondary text-primary' : 'border-gray-200'
+                className={`cursor-pointer rounded-lg border p-3 text-center transition-all  ${
+                  selectedAmount === amount ? 'border-secondary bg-secondary text-primary' : 'bg-primary text-white'
                 } hover:border-primary `}
               >
-                <span className="font-semibold text-gray-900 select-none">£{amount}</span>
+                <span className={`font-semibold text-gray-900 select-none ${selectedAmount === amount?" ":"text-white"}`}>£{amount}</span>
               </div>
             ))}
           </div>

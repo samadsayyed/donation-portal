@@ -60,7 +60,19 @@ const PaymentForm = ({
   const session = useSessionId();
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalAmount = cartItems.reduce((total, item) => total + item.donation_amount * item.quantity, 0);
+  const amount = cartItems
+    .reduce((total, item) => total + parseFloat(item.donation_amount) * item.quantity, 0)
+    .toFixed(2);
+
+  const checkTransitionFee = JSON.parse(localStorage.getItem("donationPreferences"))?.coverFee || false;
+
+  const totalAmount = Number(checkTransitionFee
+    ? (parseFloat(amount) * 1.0125).toFixed(2) // Adding 1.25% transaction fee
+    : amount);
+
+
+    console.log(totalAmount,"----------------");
+    
 
   const createDonation = useMutation({
     mutationFn: createSingleDonation,

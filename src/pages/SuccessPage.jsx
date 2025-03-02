@@ -2,45 +2,56 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Gift, Home } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { decryptData } from '../utils/functions';
+import { clearLocalStorageAfterDelay, decryptData } from '../utils/functions';
 
 const PaymentSuccessPage = () => {
-  const [countdown, setCountdown] = useState(20);
   const [showConfetti, setShowConfetti] = useState(true);
-const {data} = useParams()
-  
-console.log(data,"============================");
+  const { data } = useParams();
 
-const parsedData = JSON.parse(decryptData(data));
+  console.log(data, "============================");
 
-useEffect(()=>{
-  window.scrollTo(0,0)
-},[])
+  const [parsedData, setParsedData] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
 
-  
-  // Mock data - in a real app, this would come from props or context
+    try {
+      const decryptedData = JSON.parse(decryptData(data));
+      setParsedData(decryptedData);
+    } catch (error) {
+      console.error("Error parsing data:", error);
+    }
+
+    clearLocalStorageAfterDelay(1);
+  }, [data]);
+
+  if (!parsedData) {
+    return <div>Loading...</div>; // Handle case where data is still being set
+  }
+
+  const userCart = parsedData.cart || [];
+
   const userData = {
-    name: parsedData.personalInfo.firstName + " "+ parsedData.personalInfo.lastName,
-    email: parsedData.personalInfo.email ,
+    name: `${parsedData.personalInfo.firstName} ${parsedData.personalInfo.lastName}`,
+    email: parsedData.personalInfo.email,
     phone: parsedData.personalInfo.phone,
-    address:`${parsedData.personalInfo.address1}, ${parsedData.personalInfo.address2}, ${parsedData.personalInfo.city}, ${parsedData.personalInfo.postcode}, ${parsedData.personalInfo.country}`,
+    address: `${parsedData.personalInfo.address1}, ${parsedData.personalInfo.address2}, ${parsedData.personalInfo.city}, ${parsedData.personalInfo.postcode}, ${parsedData.personalInfo.country}`,
     program: "Premium Membership",
-    amount: "$99.99"
+    amount: "$99.99",
   };
-
 
   // Motion variants for animations
   const pageTransition = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { duration: 0.8 }
-    }
+      transition: { duration: 0.8 },
+    },
   };
 
+
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-white flex items-center justify-center p-4 overflow-hidden relative"
       initial="hidden"
       animate="visible"
@@ -48,22 +59,22 @@ useEffect(()=>{
     >
       {/* Background animated elements */}
       <BackgroundAnimation />
-      
+
       {/* Confetti explosion */}
       <AnimatePresence>
         {showConfetti && <ConfettiExplosion />}
       </AnimatePresence>
-      
+
       {/* Main success card */}
       <motion.div
         className="max-w-md w-full bg-white shadow-2xl rounded-lg overflow-hidden border border-secondaryDark relative z-10"
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
-        animate={{ 
-          opacity: 1, 
-          scale: 1, 
+        animate={{
+          opacity: 1,
+          scale: 1,
           y: 0
         }}
-        transition={{ 
+        transition={{
           type: "spring",
           stiffness: 100,
           damping: 15,
@@ -73,13 +84,13 @@ useEffect(()=>{
         <div className="p-8">
           {/* Success icon with ripple effect */}
           <SuccessIcon />
-          
+
           {/* Transaction details */}
-          <TransactionDetails userData={userData} />
-          
+          <TransactionDetails userData={userData} userCart={userCart} />
+
           {/* Action buttons */}
           <ActionButtons />
-          
+
           {/* Countdown timer */}
           {/* <CountdownTimer countdown={countdown} /> */}
         </div>
@@ -99,32 +110,32 @@ const SuccessIcon = () => {
             key={i}
             className="absolute top-1/2 left-1/2 rounded-full bg-primary opacity-30"
             initial={{ width: 0, height: 0, x: 0, y: 0 }}
-            animate={{ 
-              width: `${150 + i * 30}px`, 
+            animate={{
+              width: `${150 + i * 30}px`,
               height: `${150 + i * 30}px`,
-              x: `-${75 + i * 15}px`, 
+              x: `-${75 + i * 15}px`,
               y: `-${75 + i * 15}px`,
               opacity: 0
             }}
-            transition={{ 
+            transition={{
               width: { duration: 2, repeat: Infinity, repeatDelay: 1.5, delay: i * 0.4 },
               height: { duration: 2, repeat: Infinity, repeatDelay: 1.5, delay: i * 0.4 },
               x: { duration: 2, repeat: Infinity, repeatDelay: 1.5, delay: i * 0.4 },
               y: { duration: 2, repeat: Infinity, repeatDelay: 1.5, delay: i * 0.4 },
-              opacity: { 
-                duration: 2, 
-                repeat: Infinity, 
-                repeatDelay: 1.5, 
+              opacity: {
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1.5,
                 delay: i * 0.4,
-                from: 0.6, 
-                to: 0 
+                from: 0.6,
+                to: 0
               }
             }}
           />
         ))}
-        
+
         {/* Check circle */}
-        <motion.div 
+        <motion.div
           className="w-24 h-24 rounded-full bg-primary flex items-center justify-center relative z-10"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -145,7 +156,7 @@ const SuccessIcon = () => {
                 d="M20 6L9 17L4 12"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
-                transition={{ 
+                transition={{
                   duration: 0.8,
                   delay: 1.2,
                   ease: "easeInOut"
@@ -155,14 +166,14 @@ const SuccessIcon = () => {
           </motion.div>
         </motion.div>
       </div>
-      
+
       {/* Success text with character animation */}
       <motion.div className="overflow-hidden mb-2">
-        <motion.h1 
+        <motion.h1
           className="text-xl font-bold text-primary text-center"
           initial={{ y: 100 }}
           animate={{ y: 0 }}
-          transition={{ 
+          transition={{
             type: "spring",
             stiffness: 100,
             damping: 15,
@@ -172,7 +183,7 @@ const SuccessIcon = () => {
           <AnimatedText text="Payment Successful!" />
         </motion.h1>
       </motion.div>
-            
+
       {/* Animated line */}
       <motion.div className="w-full flex justify-center mb-4">
         <svg width="200" height="10" viewBox="0 0 200 10">
@@ -184,16 +195,16 @@ const SuccessIcon = () => {
             fill="transparent"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ 
-              duration: 1.5, 
+            transition={{
+              duration: 1.5,
               delay: 2,
               ease: "easeInOut"
             }}
           />
         </svg>
       </motion.div>
-      
-      <motion.p 
+
+      <motion.p
         className="text-secondaryDark text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -225,15 +236,19 @@ const AnimatedText = ({ text }) => {
 };
 
 // Transaction details with staggered appearance
-const TransactionDetails = ({ userData }) => {
+const TransactionDetails = ({ userData, userCart }) => {
+
+  console.log(userCart);
+  
+
   return (
-    <motion.div 
+    <motion.div
       className="border-t border-b border-secondaryDark py-6 mb-6"
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: "auto" }}
       transition={{ duration: 0.6, delay: 2.5 }}
     >
-      <motion.h2 
+      <motion.h2
         className="text-xl font-semibold text-primary mb-4"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -241,15 +256,13 @@ const TransactionDetails = ({ userData }) => {
       >
         Transaction Details
       </motion.h2>
-      
+
       <div className="grid grid-cols-2 gap-4">
         {[
           { label: "Name", value: userData.name },
           { label: "Email", value: userData.email },
           { label: "Phone", value: userData.phone },
           { label: "Address", value: userData.address },
-          { label: "Program", value: userData.program },
-          { label: "Amount", value: userData.amount }
         ].map((item, index) => (
           <motion.div
             key={index}
@@ -263,7 +276,42 @@ const TransactionDetails = ({ userData }) => {
             </p>
           </motion.div>
         ))}
+
+        {
+          userCart.map((item, index) => {
+            console.log(item);
+
+            return (
+             <>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 2.8 + index * 0.1 }}
+              >
+                {index == 0 && <p className="text-secondaryDark text-sm">Program</p>}
+                <p className="font-medium text-primary truncate" title={"item.value"}>
+                  {item.program_name}
+                </p>
+              </motion.div>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 2.8 + index * 0.1 }}
+              >
+                {index == 0 && <p className="text-secondaryDark text-sm">Amount</p>}
+                <p className="font-medium text-primary truncate" title={"item.value"}>
+                  {item.donation_amount * item.quantity}
+                </p>
+              </motion.div>
+              </>
+            )
+          })
+        }
       </div>
+      
+
     </motion.div>
   );
 };
@@ -271,13 +319,13 @@ const TransactionDetails = ({ userData }) => {
 // Action buttons with hover effects
 const ActionButtons = () => {
   return (
-    <motion.div 
+    <motion.div
       className="flex flex-col sm:flex-row gap-4"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 3.4 }}
     >
-      <motion.button 
+      <motion.button
         className="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-secondaryDark transition-colors relative overflow-hidden"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
@@ -291,8 +339,8 @@ const ActionButtons = () => {
         <Gift size={18} />
         Donate More
       </motion.button>
-      
-      <motion.button 
+
+      <motion.button
         className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-secondaryDark transition-colors relative overflow-hidden"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
@@ -320,7 +368,7 @@ const BackgroundAnimation = () => {
       {/* Animated gradient background */}
       <motion.div
         className="absolute inset-0 opacity-5"
-        animate={{ 
+        animate={{
           background: [
             "radial-gradient(circle at 0% 0%, #000 0%, transparent 50%)",
             "radial-gradient(circle at 100% 0%, #000 0%, transparent 50%)",
@@ -329,14 +377,14 @@ const BackgroundAnimation = () => {
             "radial-gradient(circle at 0% 0%, #000 0%, transparent 50%)"
           ]
         }}
-        transition={{ 
-          duration: 15, 
+        transition={{
+          duration: 15,
           ease: "linear",
           repeat: Infinity,
           times: [0, 0.25, 0.5, 0.75, 1]
         }}
       />
-      
+
       {/* Floating elements */}
       {[...Array(15)].map((_, i) => {
         const randomX1 = Math.random() * 100;
@@ -348,13 +396,13 @@ const BackgroundAnimation = () => {
         const randomScale1 = Math.random() * 0.5 + 0.5;
         const randomScale2 = Math.random() * 1 + 1;
         const randomScale3 = Math.random() * 0.5 + 0.5;
-        
+
         return (
           <motion.div
             key={i}
             className="absolute w-12 h-12 rounded-full bg-primary opacity-5"
-            initial={{ 
-              left: `${randomX1}%`, 
+            initial={{
+              left: `${randomX1}%`,
               top: `${randomY1}%`,
               scale: randomScale1
             }}
@@ -380,9 +428,9 @@ const BackgroundAnimation = () => {
 // Exploding confetti effect
 const ConfettiExplosion = () => {
   const colors = ["#000000", "#333333", "#666666", "#999999"];
-  
+
   return (
-    <motion.div 
+    <motion.div
       className="fixed inset-0 pointer-events-none z-20"
       exit={{ opacity: 0 }}
     >
@@ -393,18 +441,18 @@ const ConfettiExplosion = () => {
         const distance = 100 + Math.random() * 400;
         const xDistance = Math.cos(angle) * distance;
         const yDistance = Math.sin(angle) * distance;
-        
+
         return (
           <motion.div
             key={i}
             className="absolute top-1/2 left-1/2 rounded-md origin-center z-50"
-            style={{ 
+            style={{
               width: size,
               height: size * (0.5 + Math.random()),
               backgroundColor: color,
               rotate: `${Math.random() * 360}deg`
             }}
-            initial={{ 
+            initial={{
               x: 0,
               y: 0,
               scale: 0,
@@ -420,9 +468,9 @@ const ConfettiExplosion = () => {
             transition={{
               duration: 2.5,
               ease: "easeOut",
-              opacity: { 
-                duration: 2.5, 
-                times: [0, 0.7, 1] 
+              opacity: {
+                duration: 2.5,
+                times: [0, 0.7, 1]
               }
             }}
           />
