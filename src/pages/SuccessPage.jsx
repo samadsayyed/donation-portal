@@ -302,7 +302,7 @@ const TransactionDetails = ({ userData, userCart }) => {
               >
                 {index == 0 && <p className="text-secondaryDark text-sm">Amount</p>}
                 <p className="font-medium text-primary truncate" title={"item.value"}>
-                  {item.donation_amount * item.quantity}
+                £ {item.donation_amount * item.quantity}
                 </p>
               </motion.div>
               </>
