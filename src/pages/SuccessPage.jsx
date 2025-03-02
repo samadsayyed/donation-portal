@@ -13,7 +13,9 @@ console.log(data,"============================");
 
 const parsedData = JSON.parse(decryptData(data));
 
-console.log(parsedData,"+++++");
+useEffect(()=>{
+  window.scrollTo(0,0)
+},[])
 
 
   

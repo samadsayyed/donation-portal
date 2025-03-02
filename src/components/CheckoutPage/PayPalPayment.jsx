@@ -29,6 +29,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
       if (userData) {
         const encryptedData = encryptData(userData);
         navigate(`/success/${encodeURIComponent(encryptedData)}`);
+        // window.scrollTo(0,0)
       }
       onSuccess();
     },
