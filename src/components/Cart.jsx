@@ -70,7 +70,7 @@ const Cart = ({isOpen, setIsOpen,render,setRender}) => {
           setIsOpen(true);
           refetch();
         }}
-        className="px-4 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors z-50"
+        className="px-4 py-4 bg-primary text-white rounded-full hover:bg-gray-800 transition-colors z-50"
       >
         <ShoppingCart />
       </button>
@@ -197,7 +197,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
                     window.location.href = "https://zobiatrust.tscube.co.in/appeals/";
                     onClose();
                   }}
-                  className="w-full bg-gray-900 text-white py-4 px-6 rounded-2xl font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-primary  text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
                 >
                   Add More Programs <Plus className="w-4 h-4" />
                 </button>
@@ -214,7 +214,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
                     onClose();
                     navigate("/checkout");
                   }}
-                  className="w-full bg-gray-900 text-white py-4 px-6 rounded-2xl font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-primary text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
                 >
                   Checkout <ChevronRight className="w-4 h-4" />
                 </button>

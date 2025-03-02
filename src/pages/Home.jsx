@@ -118,7 +118,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4 ">
       <div className="mx-auto max-w-4xl">
         <div className="rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl p-8">
           <header className="text-center mb-8">

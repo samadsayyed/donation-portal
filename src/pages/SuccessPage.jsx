@@ -54,7 +54,7 @@ console.log(parsedData,"+++++");
       
       {/* Main success card */}
       <motion.div
-        className="max-w-md w-full bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200 relative z-10"
+        className="max-w-md w-full bg-white shadow-2xl rounded-lg overflow-hidden border border-secondaryDark relative z-10"
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
         animate={{ 
           opacity: 1, 
@@ -95,7 +95,7 @@ const SuccessIcon = () => {
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute top-1/2 left-1/2 rounded-full bg-black opacity-30"
+            className="absolute top-1/2 left-1/2 rounded-full bg-primary opacity-30"
             initial={{ width: 0, height: 0, x: 0, y: 0 }}
             animate={{ 
               width: `${150 + i * 30}px`, 
@@ -123,7 +123,7 @@ const SuccessIcon = () => {
         
         {/* Check circle */}
         <motion.div 
-          className="w-24 h-24 rounded-full bg-black flex items-center justify-center relative z-10"
+          className="w-24 h-24 rounded-full bg-primary flex items-center justify-center relative z-10"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{
@@ -157,7 +157,7 @@ const SuccessIcon = () => {
       {/* Success text with character animation */}
       <motion.div className="overflow-hidden mb-2">
         <motion.h1 
-          className="text-xl font-bold text-black text-center"
+          className="text-xl font-bold text-primary text-center"
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           transition={{ 
@@ -176,7 +176,7 @@ const SuccessIcon = () => {
         <svg width="200" height="10" viewBox="0 0 200 10">
           <motion.path
             d="M 0,5 L 200,5"
-            stroke="black"
+            stroke="primary"
             strokeWidth="2"
             strokeLinecap="round"
             fill="transparent"
@@ -192,7 +192,7 @@ const SuccessIcon = () => {
       </motion.div>
       
       <motion.p 
-        className="text-gray-600 text-center"
+        className="text-secondaryDark text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2.2 }}
@@ -226,13 +226,13 @@ const AnimatedText = ({ text }) => {
 const TransactionDetails = ({ userData }) => {
   return (
     <motion.div 
-      className="border-t border-b border-gray-200 py-6 mb-6"
+      className="border-t border-b border-secondaryDark py-6 mb-6"
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: "auto" }}
       transition={{ duration: 0.6, delay: 2.5 }}
     >
       <motion.h2 
-        className="text-xl font-semibold text-black mb-4"
+        className="text-xl font-semibold text-primary mb-4"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 2.7 }}
@@ -255,8 +255,8 @@ const TransactionDetails = ({ userData }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 2.8 + index * 0.1 }}
           >
-            <p className="text-gray-600 text-sm">{item.label}</p>
-            <p className="font-medium text-black truncate" title={item.value}>
+            <p className="text-secondaryDark text-sm">{item.label}</p>
+            <p className="font-medium text-primary truncate" title={item.value}>
               {item.value}
             </p>
           </motion.div>
@@ -276,7 +276,7 @@ const ActionButtons = () => {
       transition={{ delay: 3.4 }}
     >
       <motion.button 
-        className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors relative overflow-hidden"
+        className="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-secondaryDark transition-colors relative overflow-hidden"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
       >
@@ -291,13 +291,13 @@ const ActionButtons = () => {
       </motion.button>
       
       <motion.button 
-        className="flex-1 border border-black text-black py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors relative overflow-hidden"
+        className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-secondaryDark transition-colors relative overflow-hidden"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => window.location.href = "/"}
       >
         <motion.span
-          className="absolute inset-0 bg-black opacity-5"
+          className="absolute inset-0 bg-primary opacity-5"
           initial={{ x: "-100%" }}
           whileHover={{ x: "100%" }}
           transition={{ duration: 0.6 }}
@@ -350,7 +350,7 @@ const BackgroundAnimation = () => {
         return (
           <motion.div
             key={i}
-            className="absolute w-12 h-12 rounded-full bg-black opacity-5"
+            className="absolute w-12 h-12 rounded-full bg-primary opacity-5"
             initial={{ 
               left: `${randomX1}%`, 
               top: `${randomY1}%`,

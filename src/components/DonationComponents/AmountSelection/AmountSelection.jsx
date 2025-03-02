@@ -19,7 +19,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
     refetchInterval: 50 * 60 * 1000,
   });
 
-  const predefinedAmounts = [10, 20, 50, 100]; // ✅ Predefined price options
+  const predefinedAmounts = [10, 20, 50, 100,200]; // ✅ Predefined price options
 
   const handleCustomAmountChange = (e) => {
     const value = e.target.value;
@@ -66,14 +66,14 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
       {!isLoading && !isError && (
         <div className="space-y-4">
           {/* Fixed Amount Options - More Compact Grid */}
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-5 gap-2">
             {predefinedAmounts.map((amount) => (
               <div
                 key={amount}
                 onClick={() => handleAmountClick(amount)}
                 className={`cursor-pointer rounded-lg border p-3 text-center transition-all ${
-                  selectedAmount === amount ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
-                } hover:border-blue-500 hover:bg-blue-50`}
+                  selectedAmount === amount ? 'border-secondary bg-secondary text-primary' : 'border-gray-200'
+                } hover:border-primary `}
               >
                 <span className="font-semibold text-gray-900 select-none">£{amount}</span>
               </div>
@@ -101,7 +101,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
           <button
             onClick={handleConfirm}
             disabled={!selectedAmount && !customAmount}
-            className={`w-full bg-gray-900 text-white py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors ${
+            className={`w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primaryHover transition-colors ${
               !selectedAmount && !customAmount ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

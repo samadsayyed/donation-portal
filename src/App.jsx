@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout.jsx';
 import { useState } from 'react';
 import Header from './components/Header.jsx';
 import PaymentSuccessPage from './pages/SuccessPage.jsx';
+import Footer from './components/Footer.jsx';
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ function App() {
             {/* <Route path="/test" element={<Test sessionId={sessionId} />} /> */}
             <Route path='/success/:data' element={<PaymentSuccessPage/>}/>
           </Routes>
+        <Footer/>
         </BrowserRouter>
       </CartProvider>
       <Toaster/>

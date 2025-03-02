@@ -13,7 +13,7 @@ const StepIndicator = ({ step }) => (
       <div key={s.number} className="flex items-center">
         <div
           className={`flex items-center justify-center rounded-full w-8 h-8 ${
-            step === s.number ? "bg-black text-white" : "bg-gray-100 text-gray-400"
+            step === s.number ? "bg-primary text-white" : "bg-gray-100 text-gray-400"
           } transition-colors duration-200`}
         >
           {s.number}

@@ -139,7 +139,7 @@ const DonationWizard = () => {
         </button>
         <button
           onClick={step === 3 ? handleSubmit : () => setStep(step + 1)}
-          className="px-6 py-2 rounded-lg bg-black text-white hover:bg-gray-900"
+          className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primaryHover "
         >
           {step === 3 ? "Submit" : "Next"}
         </button>
