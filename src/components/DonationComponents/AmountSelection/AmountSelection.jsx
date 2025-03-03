@@ -66,7 +66,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
       {!isLoading && !isError && (
         <div className="space-y-4">
           {/* Fixed Amount Options - More Compact Grid */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-4 md:grid-cols-5 gap-2">
             {predefinedAmounts.map((amount) => (
               <div
                 key={amount}

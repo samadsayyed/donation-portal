@@ -7,12 +7,12 @@ const Header = () => {
         <div className="flex justify-center items-center">
           {/* Logo container with link to homepage */}
           <a 
-            href="https://zobiatrust.tscube.co.in/" 
+            href="https://zobiatrust.org/" 
             className="flex items-center justify-center"
           >
             {/* Actual Zobia Trust logo */}
             <img 
-              src="https://zobiatrust.tscube.co.in/wp-content/uploads/2023/08/Zobia_School_Fundraising_Logo.png" 
+              src="https://zobiatrust.org/wp-content/uploads/2023/08/Zobia_School_Fundraising_Logo.png" 
               alt="Zobia Trust Logo" 
               className="h-12 md:h-16 lg:h-20"
             />

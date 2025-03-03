@@ -44,8 +44,8 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
 
 
   useEffect(() => {
-    const category = searchParams.get("category_id");
-    const program = searchParams.get("program_id");
+    const category = Number(searchParams.get("category_id"));
+    const program = Number(searchParams.get("program_id"));
     let country = searchParams.get("country_id");
     const amount = searchParams.get("amount");
     const type = searchParams.get("type");

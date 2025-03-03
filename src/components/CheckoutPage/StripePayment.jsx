@@ -273,7 +273,7 @@ const PaymentForm = ({
                       <h3 className="font-medium">{item.program_name}</h3>
                       <p className="text-gray-400 text-sm">Quantity: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">${(item.quantity * item.donation_amount).toFixed(2)}</p>
+                    <p className="font-semibold">£{(item.quantity * item.donation_amount).toFixed(2)}</p>
                   </div>
                 </div>
               ))}
@@ -283,7 +283,7 @@ const PaymentForm = ({
               <div className="border-t border-gray-700 pt-4 mb-4">
                 <div className="flex justify-between text-lg">
                   <span>Total</span>
-                  <span className="font-bold">${totalAmount.toFixed(2)}</span>
+                  <span className="font-bold">£{totalAmount.toFixed(2)}</span>
                 </div>
                 <p className="text-gray-400 text-sm mt-2">Thank you for your generosity</p>
               </div>
@@ -452,7 +452,7 @@ const PaymentForm = ({
                 disabled={loading || !stripe}
                 className="w-full bg-blue-600 text-white py-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium text-lg"
               >
-                {loading ? "Processing..." : `Donate $${totalAmount.toFixed(2)}`}
+                {loading ? "Processing..." : `Donate £${totalAmount.toFixed(2)}`}
               </button>
 
               <p className="text-sm text-gray-500 text-center mt-4">
