@@ -60,8 +60,13 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
     // If all parameters exist, skip to the amount selection step
     if (category && program && type === "one-off") {
       setStep(4);
+    } 
+    // If only category is defined, go to step 2
+    else if (category && !program && !amount && !type) {
+      setStep(2);
     }
   }, [searchParams]);
+  
   
 
   const resetDonation = () => {
