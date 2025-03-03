@@ -43,10 +43,7 @@ const PaymentForm = ({
 }) => {
 
   const userData = JSON.parse(localStorage.getItem("userData"))
-
-  console.log(userData,"------------------");
   
-
   const stripe = useStripe();
   const elements = useElements();
   const [email, setEmail] = useState(userData.personalInfo.email);
@@ -55,12 +52,13 @@ const PaymentForm = ({
     line1: userData.personalInfo.address1,
     line2: userData.personalInfo.address2,
     city: userData.personalInfo.city,
-    // state: userData.personalInfo.state,
     postalCode: userData.personalInfo.postcode,
     country: "GB" // Default country code for United Kingdom
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  // New state for the cover fee checkbox
+  const [coverTransactionFee, setCoverTransactionFee] = useState(false);
 
   const navigate = useNavigate();
   const session = useSessionId();
@@ -70,15 +68,20 @@ const PaymentForm = ({
     .reduce((total, item) => total + parseFloat(item.donation_amount) * item.quantity, 0)
     .toFixed(2);
 
-  const checkTransitionFee = JSON.parse(localStorage.getItem("donationPreferences"))?.coverFee || false;
+  // UK Charity Stripe fee calculation (1.4% + 20p for UK/European cards)
+  const calculateStripeFee = (donationAmount) => {
+    // 1.4% + 20p for UK/European cards for registered charities
+    const feePercentage = 0.014;
+    const fixedFee = 0.20;
+    return (donationAmount * feePercentage) + fixedFee;
+  };
 
-  const totalAmount = Number(checkTransitionFee
-    ? (parseFloat(amount) * 1.0125).toFixed(2) // Adding 1.25% transaction fee
-    : amount);
-
-
-    console.log(totalAmount,"----------------");
-    
+  const stripeFee = calculateStripeFee(parseFloat(amount));
+  
+  // Calculate total amount including fee if the user opts to cover it
+  const totalAmount = coverTransactionFee
+    ? parseFloat(amount) + stripeFee
+    : parseFloat(amount);
 
   const createDonation = useMutation({
     mutationFn: createSingleDonation,
@@ -144,7 +147,6 @@ const PaymentForm = ({
         address.line1,
         address.line2,
         address.city,
-        // address.state,
         address.postalCode,
         countryName
       ].filter(Boolean).join(", ");
@@ -161,7 +163,8 @@ const PaymentForm = ({
         session_id: session,
         donor_name: variables.name,
         donor_address: formattedAddress,
-        donor_email: email
+        donor_email: email,
+        covered_fees: coverTransactionFee ? "Yes" : "No"
       };
 
       createDonation.mutate(donationData);
@@ -199,7 +202,6 @@ const PaymentForm = ({
           line1: address.line1,
           line2: address.line2,
           city: address.city,
-          state: address.state,
           postal_code: address.postalCode,
           country: address.country, // Using ISO country code
         },
@@ -222,7 +224,6 @@ const PaymentForm = ({
       address.line1,
       address.line2,
       address.city,
-      address.state,
       address.postalCode,
       countryName
     ].filter(Boolean).join(", ");
@@ -258,7 +259,6 @@ const PaymentForm = ({
             >
               <ChevronLeft className="text-white" size={20} />
             </button>
-            {/* <span className="px-3 py-1 text-sm bg-orange-500 rounded-md text-white font-medium">TEST MODE</span> */}
           </div>
 
           <div className="flex-grow flex flex-col text-white">
@@ -281,8 +281,20 @@ const PaymentForm = ({
             <div className="mt-auto">
               <div className="border-t border-gray-700 pt-4 mb-4">
                 <div className="flex justify-between text-lg">
+                  <span>Donation Amount</span>
+                  <span>£{parseFloat(amount).toFixed(2)}</span>
+                </div>
+                
+                {coverTransactionFee && (
+                  <div className="flex justify-between text-lg mt-2">
+                    <span>Transaction Fee</span>
+                    <span>£{stripeFee.toFixed(2)}</span>
+                  </div>
+                )}
+                
+                <div className="flex justify-between text-lg mt-4 font-bold">
                   <span>Total</span>
-                  <span className="font-bold">£{totalAmount.toFixed(2)}</span>
+                  <span>£{totalAmount.toFixed(2)}</span>
                 </div>
                 <p className="text-gray-400 text-sm mt-2">Thank you for your generosity</p>
               </div>
@@ -297,7 +309,7 @@ const PaymentForm = ({
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Personal Information */}
-              <div className="bg-gray-50 px-6 rounded-lg">
+              <div className="bg-gray-50 px-6 py-4 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Personal Information</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -327,7 +339,7 @@ const PaymentForm = ({
               </div>
 
               {/* Billing Address */}
-              <div className="bg-gray-50 px-6 rounded-lg">
+              <div className="bg-gray-50 px-6 py-4 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Billing Address</h2>
                 <div className="space-y-4">
                   <div>
@@ -365,18 +377,6 @@ const PaymentForm = ({
                         required
                       />
                     </div>
-
-                    {/* <div>
-                      <label htmlFor="state" className="block text-sm font-medium mb-1">State/Province</label>
-                      <input
-                        id="state"
-                        type="text"
-                        value={address.state}
-                        onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                        className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
-                        required
-                      />
-                    </div> */}
                     <div>
                       <label htmlFor="postalCode" className="block text-sm font-medium mb-1">Postal Code</label>
                       <input
@@ -391,7 +391,6 @@ const PaymentForm = ({
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-
                     <div>
                       <label htmlFor="country" className="block text-sm font-medium mb-1">Country</label>
                       <select
@@ -413,8 +412,27 @@ const PaymentForm = ({
                 </div>
               </div>
 
+              {/* Transaction Fee Option */}
+              <div className="bg-gray-50 px-6 py-4 rounded-lg">
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="coverFee"
+                      type="checkbox"
+                      checked={coverTransactionFee}
+                      onChange={(e) => setCoverTransactionFee(e.target.checked)}
+                      className="w-4 h-4 border border-gray-300 rounded focus:ring-3 focus:ring-blue-300"
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="coverFee" className="font-medium text-gray-700">Cover transaction fee</label>
+                    <p className="text-gray-500">Add £{stripeFee.toFixed(2)} to cover Stripe's processing fee </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Payment Information */}
-              <div className="bg-gray-50 px-6 rounded-lg">
+              <div className="bg-gray-50 px-6 py-4 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Payment Information</h2>
                 <div>
                   <label htmlFor="card-element" className="block text-sm font-medium mb-1">Credit or debit card</label>

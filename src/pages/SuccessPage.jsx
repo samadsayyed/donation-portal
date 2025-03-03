@@ -8,7 +8,6 @@ const PaymentSuccessPage = () => {
   const [showConfetti, setShowConfetti] = useState(true);
   const { data } = useParams();
 
-  console.log(data, "============================");
 
   const [parsedData, setParsedData] = useState(null);
 
@@ -238,9 +237,6 @@ const AnimatedText = ({ text }) => {
 // Transaction details with staggered appearance
 const TransactionDetails = ({ userData, userCart }) => {
 
-  console.log(userCart);
-  
-
   return (
     <motion.div
       className="border-t border-b border-secondaryDark py-6 mb-6"
@@ -279,8 +275,6 @@ const TransactionDetails = ({ userData, userCart }) => {
 
         {
           userCart.map((item, index) => {
-            console.log(item);
-
             return (
              <>
               <motion.div

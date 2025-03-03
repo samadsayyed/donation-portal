@@ -39,8 +39,7 @@ const DonationWizard = () => {
     }
   });
 
-  const stripePromise = loadStripe("pk_live_51MvUL8G527sG2b9VZF4Qdw9bCxz26EUT5ARosBKNAOazEcx7Y9yfOqW7FKS66GcEAbBfjPevkFwpUcgcCJ4pmLwC00w8Ql82mH");
-  // const stripePromise = loadStripe("pk_test_51OpqyISCpAlqBVLzSBLMsm0w76Fvs0TkHkitCp7c5KFFk0DxPpVyU7do8eAJyi2SR4QAFnhNyphoteu9Yd16qswN00dQN0O2Jq");
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 
   const session = useSessionId()
 
@@ -68,22 +67,23 @@ const DonationWizard = () => {
       setReference_no(referenceId);
   
       const updatedDonation = { ...donation, referenceId, ...preferences, session };
-
-      const cart = JSON.parse(localStorage.getItem("cart"))
-      localStorage.setItem("userData",JSON.stringify({...donation,cart}));
-      
-      // Check if any required field is missing
-      const isInvalid = requiredFields.some(field => !updatedDonation.personalInfo?.[field]);
   
-      if (isInvalid) {
-        toast.error("Missing required fields", updatedDonation);
+      const cart = JSON.parse(localStorage.getItem("cart"));
+      localStorage.setItem("userData", JSON.stringify({ ...donation, cart }));
+  
+      // Find missing required fields
+      const missingFields = requiredFields.filter(field => !updatedDonation.personalInfo?.[field]);
+  
+      if (missingFields.length > 0) {
+        toast.error(`Missing required fields: ${missingFields.join(", ")}`);
         return null;
       }
-      // toast.loading()
-      toast.loading("processing")
+  
+      toast.loading("Processing...");
       createCartTransaction(updatedDonation);
     },
   });
+  
   
 
 

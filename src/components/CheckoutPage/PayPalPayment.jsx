@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -9,21 +10,39 @@ import { encryptData } from "../../utils/functions";
 const PayPalPayment = ({ reference_no, onSuccess }) => {
   const session = useSessionId();
   const navigate = useNavigate();
-
-
-
+  const [coverFee, setCoverFee] = useState(false);
+  const [totalAmount, setTotalAmount] = useState("0.00");
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const amount = cartItems
-    .reduce((total, item) => total + parseFloat(item.donation_amount) * item.quantity, 0)
+    .reduce(
+      (total, item) =>
+        total + parseFloat(item.donation_amount) * item.quantity,
+      0
+    )
     .toFixed(2);
 
-  const checkTransitionFee = JSON.parse(localStorage.getItem("donationPreferences"))?.coverFee || false;
+  // PayPal discounted transaction fees for UK charities
+  const PAYPAL_PERCENTAGE_FEE = 0.014; // 1.4%
+  const PAYPAL_FIXED_FEE = 0.20; // Fixed fee in GBP
 
-  const totalAmount = Number(checkTransitionFee
-    ? (parseFloat(amount) * 1.0125).toFixed(2) // Adding 1.25% transaction fee
-    : amount);
+  // Function to calculate total amount including PayPal fees
+  const calculateTotalAmount = (coverFee) => {
+    if (coverFee) {
+      return (
+        parseFloat(amount) +
+        parseFloat(amount) * PAYPAL_PERCENTAGE_FEE +
+        PAYPAL_FIXED_FEE
+      ).toFixed(2);
+    } else {
+      return amount;
+    }
+  };
 
+  // Update total amount whenever coverFee changes
+  useEffect(() => {
+    setTotalAmount(calculateTotalAmount(coverFee));
+  }, [coverFee]);
 
   const createDonation = useMutation({
     mutationFn: createSingleDonation,
@@ -37,7 +56,6 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
       if (userData) {
         const encryptedData = encryptData(userData);
         navigate(`/success/${encodeURIComponent(encryptedData)}`);
-        // window.scrollTo(0,0)
       }
       onSuccess();
     },
@@ -49,54 +67,80 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
     onSettled: () => {
       toast.dismiss();
     },
-  }); 
+  });
 
-  // stage 
-  // <PayPalScriptProvider options={{ "client-id": "Adm3RyFPf-3U4qNUuTD8d1G2grwiwfCfDkh04R2AKjC_yjYbbvWtiBSKnR-P2tAAGS510XkopYKa-E3p",currency:"GBP" }}>
-  {/* // sandbox zobia 
-  <PayPalScriptProvider options={{ "client-id": "AQhpaF4siwgu44bvNCEKuROnWnhFLjIEfogaBFEl2FFdECmWPebZsgVxEBImGi8R2Ed26P7jAy2UgBeI", currency: "GBP" }}> */}
   return (
-
-     <PayPalScriptProvider options={{ "client-id": "Ad1m3eq6LrnYS4tb_V91bw753AMRV_-8CrioEHXvlS34vD5LrpG06w13ucpA_Tcw1FNBD7GxdFjOPZym",currency:"GBP" }}> 
-
-
-      <div className="mt-4">
-        <PayPalButtons
-          createOrder={(data, actions) => {
-            return actions.order.create({
-              purchase_units: [
-                {
-                  amount: {
-                    value: totalAmount,
+    <PayPalScriptProvider
+      options={{
+        "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+        currency: "GBP",
+      }}
+    >
+      <div className="mt-6 p-6 bg-white rounded-lg shadow-md">
+        {/* Highlighted Amount Display */}
+        <div className="mb-4 text-center">
+          <p className="text-gray-600 font-medium">Total Donation Amount</p>
+          <div className="text-3xl font-bold text-indigo-700 mt-1">
+            £{totalAmount}
+          </div>
+        </div>
+        
+        {/* Cover Fee Checkbox - Now below the amount */}
+        <div className="mb-5 mt-3 flex items-center justify-center">
+          <label className="flex items-center cursor-pointer text-gray-700 hover:text-indigo-600 transition-colors">
+            <input
+              type="checkbox"
+              checked={coverFee}
+              onChange={(e) => setCoverFee(e.target.checked)}
+              className="form-checkbox h-5 w-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            />
+            <span className="ml-2">I want to cover the transaction fee</span>
+          </label>
+        </div>
+        
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-4"></div>
+        
+        {/* PayPal Buttons */}
+        <div className="mt-4">
+          <PayPalButtons
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: totalAmount,
+                    },
                   },
-                },
-              ],
-            });
-          }}
-          onApprove={(data, actions) => {
-            return actions.order.capture().then((details) => {
-              toast.success("Payment successful!", details);
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then((details) => {
+                toast.success("Payment successful!", details);
 
-              const donationData = {
-                txn_id: details.id,
-                payment_amt: details.purchase_units[0].amount.value,
-                currency: details.purchase_units[0].amount.currency_code,
-                payment_status: "Completed",
-                payment_mode_code: "PAYPAL",
-                auth_code: "",
-                reference_no,
-                auth: 0,
-                session_id: session,
-              };
+                const donationData = {
+                  txn_id: details.id,
+                  payment_amt: details.purchase_units[0].amount.value,
+                  currency: details.purchase_units[0].amount.currency_code,
+                  payment_status: "Completed",
+                  payment_mode_code: "PAYPAL",
+                  auth_code: "",
+                  reference_no,
+                  auth: 0,
+                  session_id: session,
+                  covered_fee: coverFee, // Indicate if the donor chose to cover the fee
+                };
 
-              createDonation.mutate(donationData);
-            });
-          }}
-          onError={(err) => {
-            console.error("PayPal Error:", err);
-            toast.error("Payment failed!");
-          }}
-        />
+                createDonation.mutate(donationData);
+              });
+            }}
+            onError={(err) => {
+              console.error("PayPal Error:", err);
+              toast.error("Payment failed!");
+            }}
+          />
+        </div>
       </div>
     </PayPalScriptProvider>
   );

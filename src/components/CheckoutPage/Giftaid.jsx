@@ -67,7 +67,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
         </div>
       </div>
 
-      {/* Transaction Fee Section */}
+      {/* Transaction Fee Section
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <div className="flex items-start">
           <div className="mr-3 mt-1">
@@ -113,7 +113,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Communication Preferences */}
       <div className="bg-white border border-gray-200 rounded-lg p-4">

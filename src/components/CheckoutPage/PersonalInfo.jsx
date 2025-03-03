@@ -41,7 +41,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Title Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
           <select
             name="title"
             value={donation.personalInfo.title || ""}
@@ -59,7 +59,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
         {userFields.map(({ name, label }) => (
           name !== "title" && (
             <div key={name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{label} *</label>
               <input
                 type="text"
                 name={name}
@@ -80,7 +80,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
       <div className="flex flex-col md:flex-row gap-3 md:gap-4">
         {/* Country Selection */}
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Country *</label>
           <select
             name="country"
             value={donation.personalInfo.country || ""}
@@ -97,7 +97,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
         {/* Postcode Input & PAF Button */}
         <div className="flex gap-2 flex-1">
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Post Code / ZIP</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Post Code / ZIP *</label>
             <input
               type="text"
               name="postcode"
@@ -125,7 +125,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
         {addressFields.map(({ name, label }) => (
           name !== "country" && name !== "postcode" && (
             <div key={name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{label} *</label>
               <input
                 type="text"
                 name={name}
@@ -138,9 +138,8 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
           )
         ))}
       </div>
-
-      {/* Payment Gateway Selection */}
-      <div className="mt-8">
+            {/* Payment Gateway Selection */}
+            <div className="mt-8">
         <label className="block text-sm font-medium text-gray-700 mb-3">Payment Gateway</label>
         <div className="flex flex-wrap gap-4">
           {["stripe", "paypal"].map((gateway) => (
@@ -152,7 +151,8 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
                 : "border-gray-200"
               }`}
             >
-              {gateway === "stripe" ? <CreditCard size={24} className="text-gray-900" /> : <Banknote size={24} className="text-gray-900" />}
+              <img src={gateway === "stripe" ?"/stripe.png":"/paypal.png"} className=" h-6 w-6" alt="" />
+              {/* {gateway === "stripe" ? <CreditCard size={24} className="text-gray-900" /> : <Banknote size={24} className="text-gray-900" />} */}
               <span className="font-medium capitalize">{gateway}</span>
             </div>
           ))}
