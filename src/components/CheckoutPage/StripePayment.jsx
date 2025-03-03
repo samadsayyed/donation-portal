@@ -41,16 +41,23 @@ const PaymentForm = ({
   isPaymentGatewayOpen,
   reference_no,
 }) => {
+
+
+  const userData = JSON.parse(localStorage.getItem("userData"))
+
+  console.log(userData,"------------------");
+  
+
   const stripe = useStripe();
   const elements = useElements();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState(userData.personalInfo.email);
+  const [name, setName] = useState(`${userData.personalInfo.firstName} ${userData.personalInfo.lastName}`);
   const [address, setAddress] = useState({
-    line1: "",
-    line2: "",
-    city: "",
-    state: "",
-    postalCode: "",
+    line1: userData.personalInfo.address1,
+    line2: userData.personalInfo.address2,
+    city: userData.personalInfo.city,
+    // state: userData.personalInfo.state,
+    postalCode: userData.personalInfo.postcode,
     country: "GB" // Default country code for United Kingdom
   });
   const [error, setError] = useState(null);
@@ -138,7 +145,7 @@ const PaymentForm = ({
         address.line1,
         address.line2,
         address.city,
-        address.state,
+        // address.state,
         address.postalCode,
         countryName
       ].filter(Boolean).join(", ");
@@ -360,7 +367,7 @@ const PaymentForm = ({
                       />
                     </div>
 
-                    <div>
+                    {/* <div>
                       <label htmlFor="state" className="block text-sm font-medium mb-1">State/Province</label>
                       <input
                         id="state"
@@ -370,10 +377,7 @@ const PaymentForm = ({
                         className="w-full p-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                         required
                       />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
+                    </div> */}
                     <div>
                       <label htmlFor="postalCode" className="block text-sm font-medium mb-1">Postal Code</label>
                       <input
@@ -385,6 +389,9 @@ const PaymentForm = ({
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
 
                     <div>
                       <label htmlFor="country" className="block text-sm font-medium mb-1">Country</label>
