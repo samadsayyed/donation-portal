@@ -94,7 +94,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
   const handleAmountSelect = async (amount) => {
     try {
       const payload = {
-        donation_period: selectedCategory == 1 ? "one-off" : selectedCategory == 11 ? "monthly" : "",
+        donation_period: selectedCategory == 1 ? "one-off" : selectedCategory == 10 ? "monthly" : "",
         currency: "GBP",
         currency_id: 1,
         category_id: Number(selectedCategory),
