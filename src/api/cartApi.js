@@ -3,7 +3,9 @@ import api from "./axios";
 import axios from "axios";
 
 export const createCart = async (cartData) => {
-  const response = await api.post("/cart/create", cartData);
+  const response = await api.post("/cart/create", cartData,{
+    timeout:10000
+  });
   return response.data;
 };
 
