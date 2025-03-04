@@ -74,7 +74,8 @@ const PaymentForm = ({
     // 1.4% + 20p for UK/European cards for registered charities
     const feePercentage = 0.014;
     const fixedFee = 0.20;
-    return (donationAmount * feePercentage) + fixedFee;
+    const additionalFeee = 0.20;
+    return (donationAmount * feePercentage) + fixedFee + additionalFeee;
   };
 
   const stripeFee = calculateStripeFee(parseFloat(amount));

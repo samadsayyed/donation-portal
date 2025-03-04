@@ -29,9 +29,7 @@ const DonationPortal = ({ sessionId,setIsCartOpen,setRender,render }) => {
       toast.success("Cart created successfully!");
       addToCart();
       resetDonation();
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
       setRender(p=>!p);
-      
       setIsCartOpen(true)
     },
     onError: (error) => {
