@@ -4,29 +4,7 @@ import React from 'react';
 const CompactFooter = () => {
   return (
     <footer className="bg-primary text-white font-sans py-6 px-4">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Donation Methods Section */}
-        <div className="space-y-3">
-          <h3 className="text-secondary font-medium text-lg border-b border-secondaryDark pb-1 mb-2">DONATE HERE</h3>
-
-          <div className="text-sm space-y-2">
-            <p className="text-white">Current ways to donate:</p>
-            <div className="flex items-start">
-              <span className="mr-1 text-secondary">•</span>
-              <span className="text-gray-200">Bank transfer to our UK Charity account</span>
-            </div>
-            <div className="flex items-start">
-              <span className="mr-1 text-secondary">•</span>
-              <span className="text-gray-200">Online card payment via secure system</span>
-            </div>
-          </div>
-          <a href="https://www.paypal.com/donate/?hosted_button_id=J8D8F387LWUEW&submit.x=104&submit.y=18#">
-            <button className="bg-secondary hover:bg-secondaryDark text-primary font-medium px-4 py-1 rounded-sm transition duration-200 my-4">
-              Donate
-            </button>
-          </a>
-        </div>
-
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Bank Details Section */}
         <div className="space-y-2">
           <h3 className="text-secondary font-medium text-lg border-b border-secondaryDark pb-1 mb-2">BANK TRANSFER DETAILS</h3>
@@ -74,7 +52,7 @@ const CompactFooter = () => {
 
             <div className="flex items-start">
               <div className="text-secondary mr-2 flex-shrink-0">
-              <Gift className=" w-5 h-5" />
+                <Gift className="w-5 h-5" />
               </div>
               <div>
                 <h4 className="font-medium">Gift Aid</h4>
