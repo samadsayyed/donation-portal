@@ -57,7 +57,7 @@ const PaymentForm = ({
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   // New state for the cover fee checkbox
-  const [coverTransactionFee, setCoverTransactionFee] = useState(false);
+  const [coverTransactionFee, setCoverTransactionFee] = useState(true);
   // State to handle mobile view summary toggle
   const [showMobileSummary, setShowMobileSummary] = useState(false);
 

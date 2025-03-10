@@ -5,7 +5,7 @@ import { deleteFromCart, getCart, updateCart } from "../../api/cartApi";
 import useSessionId from "../../hooks/useSessionId";
 import toast from "react-hot-toast";
 
-const DonationCart = ({ setDonation }) => {
+const DonationCart = ({ setCart }) => {
   const sessionId = useSessionId();
   const { data = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["cart", sessionId],
@@ -16,6 +16,7 @@ const DonationCart = ({ setDonation }) => {
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(data));
+    setCart(data)
   }, [data]);
 
   const [participantNames, setParticipantNames] = useState({});
@@ -92,6 +93,34 @@ const DonationCart = ({ setDonation }) => {
   };
 
   const getTotalAmount = () =>data.reduce((sum, item) => sum + item.donation_amount * item.quantity, 0);
+
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <h2 className="text-xl font-semibold mb-6 text-black">Your Donation Cart</h2>
+        {/* Loading Skeleton */}
+        <div className="space-y-4">
+          {[1, 2, 3].map((_, index) => (
+            <div key={index} className="animate-pulse space-y-2">
+              <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="bg-white rounded-xl p-6 border border-gray-200 text-red-500">
+        <h2 className="text-xl font-semibold mb-6 text-black">Your Donation Cart</h2>
+        <p>Error loading the cart. Please try again later.</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-200">

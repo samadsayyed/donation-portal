@@ -98,8 +98,8 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
         onClose();
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
   const calculateTotal = () =>
@@ -111,10 +111,10 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
         <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40">
           <motion.div
             ref={sidebarRef}
-            initial={{ x: '100%' }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="fixed right-0 top-0 h-full w-96 max-w-full md:w-96 bg-gray-50/95 backdrop-blur-xl shadow-2xl z-50"
           >
             <div className="flex flex-col h-full">
@@ -155,7 +155,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-medium text-gray-900">{item.program_name}</h3>
-
                         </div>
                         <p className="text-sm text-gray-500">£{item.donation_amount}</p>
                         <div className="flex items-center gap-3 mt-2">
@@ -187,38 +186,44 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
                     </motion.div>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500">🛒 Your cart is empty.</p>
+                  <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                    <ShoppingCart className="w-12 h-12 mb-2" />
+                    <p>Your cart is empty.</p>
+                  </div>
                 )}
               </div>
 
-              <div className=" border-gray-200 p-6 space-y-4">
+              {/* Add More Programs Button */}
+              <div className="border-gray-200 p-6 space-y-4">
                 <button
                   onClick={() => {
                     window.location.href = "https://zobiatrust.org/appeals/";
                     onClose();
                   }}
-                  className="w-full bg-primary  text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-primary text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
                 >
                   Add More Programs <Plus className="w-4 h-4" />
                 </button>
               </div>
-              
-              {/* Footer */}
-              <div className="border-t border-gray-200 p-6 space-y-4">
-                <div className="flex items-center justify-between text-lg font-semibold">
-                  <span>Total</span>
-                  <span>£{calculateTotal().toFixed(2)}</span>
+
+              {/* Footer - Show Checkout Only If Cart Has Items */}
+              {cartItems.length > 0 && (
+                <div className="border-t border-gray-200 p-6 space-y-4">
+                  <div className="flex items-center justify-between text-lg font-semibold">
+                    <span>Total</span>
+                    <span>£{calculateTotal().toFixed(2)}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      onClose();
+                      navigate("/checkout");
+                    }}
+                    className="w-full bg-primary text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
+                  >
+                    Checkout <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    onClose();
-                    navigate("/checkout");
-                  }}
-                  className="w-full bg-primary text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
-                >
-                  Checkout <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+              )}
             </div>
           </motion.div>
         </div>
@@ -226,6 +231,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
     </>
   );
 };
+
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (

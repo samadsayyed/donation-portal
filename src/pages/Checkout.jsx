@@ -14,6 +14,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import PayPalPayment from "../components/CheckoutPage/PayPalPayment";
 import { requiredFields } from "../utils/data";
+import { Link } from "react-router-dom";
 
 
 const DonationWizard = () => {
@@ -38,6 +39,8 @@ const DonationWizard = () => {
       phone: "",
     }
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [cart, setCart] = useState([]);
 
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY);
 
@@ -65,40 +68,41 @@ const DonationWizard = () => {
     mutationFn: generateReferenceId,
     onSuccess: (referenceId) => {
       setReference_no(referenceId);
-  
+
       const updatedDonation = { ...donation, referenceId, ...preferences, session };
-  
+
       const cart = JSON.parse(localStorage.getItem("cart"));
       localStorage.setItem("userData", JSON.stringify({ ...donation, cart }));
-  
+
       // Find missing required fields
       const missingFields = requiredFields.filter(field => !updatedDonation.personalInfo?.[field]);
-  
+
       if (missingFields.length > 0) {
         toast.error(`Missing required fields: ${missingFields.join(", ")}`);
         return null;
       }
-  
+
       toast.loading("Processing...");
       createCartTransaction(updatedDonation);
     },
   });
-  
-  
+
+
 
 
   const handleSubmit = () => {
+    setIsSubmitted(true);
     getReferenceId();
   };
 
   const getCurrentStep = () => {
     switch (step) {
       case 1:
-        return <DonationCart setDonation={setDonation} />;
+        return <DonationCart setCart={setCart} setDonation={setDonation} />;
       case 2:
         return <GiftAid donation={donation} setDonation={setDonation} preferences={preferences} setPreferences={setPreferences} />;
       case 3:
-        return <PersonalInfo donation={donation} setDonation={setDonation} countries={countries} paymentGateway={paymentGateway} setPaymentGateway={setPaymentGateway} />;
+        return <PersonalInfo donation={donation} setDonation={setDonation} countries={countries} paymentGateway={paymentGateway} setPaymentGateway={setPaymentGateway} submitted={isSubmitted}/>;
       default:
         return <DonationCart donation={donation} setDonation={setDonation} />;
     }
@@ -137,9 +141,24 @@ const DonationWizard = () => {
         >
           Previous
         </button>
+        {
+          cart.length == 0 && (
+            <Link to={"/"}>
+              <button
+                className={`px-6 py-2 rounded-lg bg-primary text-white hover:bg-primaryHover`}
+              >
+                Add Programs
+              </button>
+            </Link>
+          )
+        }
         <button
           onClick={step === 3 ? handleSubmit : () => setStep(step + 1)}
-          className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primaryHover "
+          disabled={cart.length === 0 || isSubmitted}
+          className={`px-6 py-2 rounded-lg ${cart.length === 0 || isSubmitted
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            : "bg-primary text-white hover:bg-primaryHover"
+            }`}
         >
           {step === 3 ? "Submit" : "Next"}
         </button>

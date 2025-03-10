@@ -10,7 +10,7 @@ import { encryptData } from "../../utils/functions";
 const PayPalPayment = ({ reference_no, onSuccess }) => {
   const session = useSessionId();
   const navigate = useNavigate();
-  const [coverFee, setCoverFee] = useState(false);
+  const [coverFee, setCoverFee] = useState(true);
   const [totalAmount, setTotalAmount] = useState("0.00");
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];

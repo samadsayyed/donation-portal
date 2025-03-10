@@ -3,15 +3,14 @@ import api from "./axios";
 import axios from "axios";
 
 export const createCart = async (cartData) => {
-  const response = await api.post("/cart/create", cartData,{
-    timeout:10000
+  const response = await api.post("/cart/create", cartData, {
+    timeout: 10000,
   });
   return response.data;
 };
 
 export const getCart = async (session_id) => {
   const res = await api.post("/cart/cart", { session_id });
-  
 
   return res.data.cart;
 };
@@ -30,7 +29,6 @@ export const deleteFromCart = async (data) => {
 };
 
 export const cartTransaction = async (data) => {
-
   const guest_details = {
     title: data.personalInfo.title,
     first_name: data.personalInfo.firstName,
@@ -46,7 +44,6 @@ export const cartTransaction = async (data) => {
     city_name: data.personalInfo.city,
   };
 
-
   const form_Data = new FormData();
   form_Data.append("auth", 0);
   form_Data.append("session_id", data.session);
@@ -60,7 +57,6 @@ export const cartTransaction = async (data) => {
   form_Data.append("send_text", data.sms ? "Y" : "N");
   form_Data.append("client_id", 1);
   try {
-    
     // const response = await api.post(`payment/transaction`, form_Data);
 
     const response = await axios.post(
