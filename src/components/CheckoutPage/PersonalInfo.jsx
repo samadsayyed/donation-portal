@@ -133,7 +133,7 @@ const PersonalInfo = ({ donation, setDonation, countries, paymentGateway, setPay
               className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors mt-6"
               onClick={() => setShowPopup(true)}
             >
-              PAF
+              Find Address
             </button>
           )}
           

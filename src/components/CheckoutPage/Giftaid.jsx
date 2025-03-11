@@ -171,7 +171,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
           <span className="font-medium">Communication:</span> We protect your data and only contact you according to your preferences. See our Privacy Policy for details.
         </p>
         <p className="mt-1">
-          For any questions or to update your preferences, contact <span className="text-secondary">info@technoservesolutions.com</span>
+          For any questions or to update your preferences, contact <span className="text-secondary">info@zobiatrust.org</span>
         </p>
       </div>
     </div>
