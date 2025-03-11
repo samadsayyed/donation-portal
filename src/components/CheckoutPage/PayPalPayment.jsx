@@ -22,6 +22,10 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
     )
     .toFixed(2);
 
+
+    console.log(parseFloat(totalAmount).toFixed(2),"===========");
+    
+
   // PayPal discounted transaction fees for UK charities
   const PAYPAL_PERCENTAGE_FEE = 0.014; // 1.4%
   const PAYPAL_FIXED_FEE = 0.20; // Fixed fee in GBP
@@ -111,7 +115,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
                 purchase_units: [
                   {
                     amount: {
-                      value: totalAmount,
+                      value: parseFloat(totalAmount).toFixed(2)
                     },
                   },
                 ],
