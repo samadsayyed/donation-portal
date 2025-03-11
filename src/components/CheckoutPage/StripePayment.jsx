@@ -231,12 +231,13 @@ const PaymentForm = ({
     ].filter(Boolean).join(", ");
 
     handlePaymentIntent.mutate({
-      amount: totalAmount * 100,
+      amount: Math.round(totalAmount * 100), // Ensures an integer
       reference_no,
       name,
       billing_address: formattedAddress,
       paymentMethod,
     });
+    
   };
 
   const handleClose = () => {

@@ -81,7 +81,8 @@ const DonationWizard = () => {
         toast.error(`Missing required fields: ${missingFields.join(", ")}`);
         return null;
       }
-
+      
+      setIsSubmitted(true);
       toast.loading("Processing...");
       createCartTransaction(updatedDonation);
     },
@@ -91,7 +92,6 @@ const DonationWizard = () => {
 
 
   const handleSubmit = () => {
-    setIsSubmitted(true);
     getReferenceId();
   };
 

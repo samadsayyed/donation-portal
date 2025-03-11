@@ -341,7 +341,7 @@ const ActionButtons = () => {
         className="flex-1 border border-primary text-primary py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-secondaryDark transition-colors relative overflow-hidden"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        onClick={() => window.location.href = "/"}
+        onClick={() => window.location.href = "https://zobiatrust.org"}
       >
         <motion.span
           className="absolute inset-0 bg-primary opacity-5"
