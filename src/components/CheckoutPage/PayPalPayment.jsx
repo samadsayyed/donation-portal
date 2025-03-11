@@ -111,8 +111,8 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
                 purchase_units: [
                   {
                     amount: {
-                      value: Math.round(totalAmount), // Ensures an integer
-                    },                    
+                      value: totalAmount,
+                    },
                   },
                 ],
               });
