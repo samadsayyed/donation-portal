@@ -153,7 +153,9 @@ const DonationWizard = () => {
           )
         }
         <button
-          onClick={step === 3 ? handleSubmit : () => setStep(step + 1)}
+          onClick={step === 3 ? handleSubmit : () => {setStep(step + 1);
+            window.scrollTo(0, 0);
+          }}
           disabled={cart.length === 0 || isSubmitted}
           className={`px-6 py-2 rounded-lg ${cart.length === 0 || isSubmitted
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
