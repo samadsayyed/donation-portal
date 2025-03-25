@@ -4,6 +4,7 @@ import Test from './pages/Test';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext.jsx';
 import useSessionId from './hooks/useSessionId';
+import useGoogleAdsTracking from './hooks/useGoogleAdsTracking';
 import { Toaster } from 'react-hot-toast';
 import Cart from './components/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
@@ -14,28 +15,29 @@ import Footer from './components/Footer.jsx';
 
 function App() {
   const queryClient = new QueryClient();
+  useGoogleAdsTracking(); // Initialize Google Ads tracking
 
   const [isOpen, setIsOpen] = useState(false);
   const sessionId = useSessionId();
-  const [render,setRender] = useState(false)
+  const [render, setRender] = useState(false)
 
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <BrowserRouter>
-        <Cart isOpen={isOpen} setIsOpen={setIsOpen} render={render} setRender={setRender}/>
-        <Header/>
+          <Cart isOpen={isOpen} setIsOpen={setIsOpen} render={render} setRender={setRender} />
+          <Header />
           <Routes>
-           
+
             <Route path="/" element={<Home sessionId={sessionId} isCartOpen={isOpen} setIsCartOpen={setIsOpen} render={render} setRender={setRender} />} />
-            <Route path="/checkout" element={<Checkout  />} />
+            <Route path="/checkout" element={<Checkout />} />
             {/* <Route path="/test" element={<Test sessionId={sessionId} />} /> */}
-            <Route path='/success/:data' element={<PaymentSuccessPage/>}/>
+            <Route path='/success/:data' element={<PaymentSuccessPage />} />
           </Routes>
-        <Footer/>
+          <Footer />
         </BrowserRouter>
       </CartProvider>
-      <Toaster/>
+      <Toaster />
     </QueryClientProvider>
   );
 }
