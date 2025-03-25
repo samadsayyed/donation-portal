@@ -4,7 +4,6 @@ import Test from './pages/Test';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CartProvider } from './context/CartContext.jsx';
 import useSessionId from './hooks/useSessionId';
-import useGoogleAdsTracking from './hooks/useGoogleAdsTracking';
 import { Toaster } from 'react-hot-toast';
 import Cart from './components/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
@@ -15,7 +14,6 @@ import Footer from './components/Footer.jsx';
 
 function App() {
   const queryClient = new QueryClient();
-  useGoogleAdsTracking(); // Initialize Google Ads tracking
 
   const [isOpen, setIsOpen] = useState(false);
   const sessionId = useSessionId();
