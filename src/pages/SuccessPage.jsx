@@ -357,7 +357,7 @@ const ActionButtons = () => {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => {
-          window.location.href = "https://zobiatrust.org/appeals/";
+          window.location.href = "https://zobiatrust.org/all-appeals/";
         }}
       >
         <motion.span

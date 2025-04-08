@@ -197,7 +197,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
               <div className="border-gray-200 p-6 space-y-4">
                 <button
                   onClick={() => {
-                    window.location.href = "https://zobiatrust.org/appeals/";
+                    window.location.href = "https://zobiatrust.org/all-appeals/";
                     onClose();
                   }}
                   className="w-full bg-primary text-white py-4 px-6 rounded-2xl font-medium hover:bg-primaryHover transition-colors flex items-center justify-center gap-2"
