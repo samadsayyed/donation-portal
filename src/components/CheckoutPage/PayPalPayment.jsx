@@ -23,8 +23,8 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
     .toFixed(2);
 
 
-    console.log(parseFloat(totalAmount).toFixed(2),"===========");
-    
+  console.log(parseFloat(totalAmount).toFixed(2), "===========");
+
 
   // PayPal discounted transaction fees for UK charities
   const PAYPAL_PERCENTAGE_FEE = 0.014; // 1.4%
@@ -61,7 +61,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
       const userData = localStorage.getItem("userData");
       if (userData) {
         const encryptedData = encryptData(userData);
-        navigate(`/success/${encodeURIComponent(encryptedData)}`);
+        navigate(`/payment-success?data=${encodeURIComponent(encryptedData)}`);
       }
       onSuccess();
     },
@@ -90,7 +90,7 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
             £{totalAmount}
           </div>
         </div>
-        
+
         {/* Cover Fee Checkbox - Now below the amount */}
         <div className="mb-5 mt-3 flex items-center justify-center">
           <label className="flex items-center cursor-pointer text-gray-700 hover:text-indigo-600 transition-colors">
@@ -103,10 +103,10 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
             <span className="ml-2">I want to cover the transaction fee</span>
           </label>
         </div>
-        
+
         {/* Divider */}
         <div className="border-t border-gray-200 my-4"></div>
-        
+
         {/* PayPal Buttons */}
         <div className="mt-4">
           <PayPalButtons

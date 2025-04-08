@@ -1,31 +1,65 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Gift, Home } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { clearLocalStorageAfterDelay, decryptData } from '../utils/functions';
 
 const PaymentSuccessPage = () => {
   const [showConfetti, setShowConfetti] = useState(true);
-  const { data } = useParams();
-
-
+  const [searchParams] = useSearchParams();
+  const data = searchParams.get('data');
   const [parsedData, setParsedData] = useState(null);
+
+  // Dummy data for demonstration
+  const dummyData = {
+    personalInfo: {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phone: "+44 123 456 7890",
+      address1: "123 Example Street",
+      address2: "Apt 4B",
+      city: "London",
+      postcode: "SW1A 1AA",
+      country: "United Kingdom"
+    },
+    cart: [
+      {
+        program_name: "Education Support",
+        donation_amount: 50,
+        quantity: 1
+      },
+      {
+        program_name: "Healthcare Initiative",
+        donation_amount: 75,
+        quantity: 1
+      }
+    ]
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     try {
-      const decryptedData = JSON.parse(decryptData(data));
-      setParsedData(decryptedData);
+      if (data) {
+        // If URL has data parameter, try to decrypt and use it
+        const decryptedData = JSON.parse(decryptData(data));
+        setParsedData(decryptedData);
+      } else {
+        // If no data parameter, use dummy data
+        setParsedData(dummyData);
+      }
     } catch (error) {
       console.error("Error parsing data:", error);
+      // If there's an error parsing the data, use dummy data
+      setParsedData(dummyData);
     }
 
     clearLocalStorageAfterDelay(1);
   }, [data]);
 
   if (!parsedData) {
-    return <div>Loading...</div>; // Handle case where data is still being set
+    return <div>Loading...</div>;
   }
 
   const userCart = parsedData.cart || [];
@@ -47,7 +81,6 @@ const PaymentSuccessPage = () => {
       transition: { duration: 0.8 },
     },
   };
-
 
   return (
     <motion.div
@@ -276,35 +309,35 @@ const TransactionDetails = ({ userData, userCart }) => {
         {
           userCart.map((item, index) => {
             return (
-             <>
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 2.8 + index * 0.1 }}
-              >
-                {index == 0 && <p className="text-secondaryDark text-sm">Program</p>}
-                <p className="font-medium text-primary truncate" title={"item.value"}>
-                  {item.program_name}
-                </p>
-              </motion.div>
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 2.8 + index * 0.1 }}
-              >
-                {index == 0 && <p className="text-secondaryDark text-sm">Amount</p>}
-                <p className="font-medium text-primary truncate" title={"item.value"}>
-                £ {item.donation_amount * item.quantity}
-                </p>
-              </motion.div>
+              <>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 2.8 + index * 0.1 }}
+                >
+                  {index == 0 && <p className="text-secondaryDark text-sm">Program</p>}
+                  <p className="font-medium text-primary truncate" title={"item.value"}>
+                    {item.program_name}
+                  </p>
+                </motion.div>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 2.8 + index * 0.1 }}
+                >
+                  {index == 0 && <p className="text-secondaryDark text-sm">Amount</p>}
+                  <p className="font-medium text-primary truncate" title={"item.value"}>
+                    £ {item.donation_amount * item.quantity}
+                  </p>
+                </motion.div>
               </>
             )
           })
         }
       </div>
-      
+
 
     </motion.div>
   );
@@ -355,8 +388,6 @@ const ActionButtons = () => {
     </motion.div>
   );
 };
-
-
 
 // Background subtle animations
 const BackgroundAnimation = () => {

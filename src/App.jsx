@@ -11,6 +11,7 @@ import { useState } from 'react';
 import Header from './components/Header.jsx';
 import PaymentSuccessPage from './pages/SuccessPage.jsx';
 import Footer from './components/Footer.jsx';
+import NotFound from './pages/NotFound';
 
 function App() {
   const queryClient = new QueryClient();
@@ -26,11 +27,11 @@ function App() {
           <Cart isOpen={isOpen} setIsOpen={setIsOpen} render={render} setRender={setRender} />
           <Header />
           <Routes>
-
             <Route path="/" element={<Home sessionId={sessionId} isCartOpen={isOpen} setIsCartOpen={setIsOpen} render={render} setRender={setRender} />} />
             <Route path="/checkout" element={<Checkout />} />
             {/* <Route path="/test" element={<Test sessionId={sessionId} />} /> */}
-            <Route path='/success/:data' element={<PaymentSuccessPage />} />
+            <Route path='/payment-success' element={<PaymentSuccessPage />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </BrowserRouter>

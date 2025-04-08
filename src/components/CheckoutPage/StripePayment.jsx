@@ -42,7 +42,7 @@ const PaymentForm = ({
   reference_no,
 }) => {
   const userData = JSON.parse(localStorage.getItem("userData"))
-  
+
   const stripe = useStripe();
   const elements = useElements();
   const [email, setEmail] = useState(userData.personalInfo.email);
@@ -79,7 +79,7 @@ const PaymentForm = ({
   };
 
   const stripeFee = calculateStripeFee(parseFloat(amount));
-  
+
   // Calculate total amount including fee if the user opts to cover it
   const totalAmount = coverTransactionFee
     ? parseFloat(amount) + stripeFee
@@ -103,7 +103,7 @@ const PaymentForm = ({
       const userData = localStorage.getItem("userData");
       if (userData) {
         const encryptedData = encryptData(userData);
-        navigate(`/success/${encodeURIComponent(encryptedData)}`);
+        navigate(`/payment-success?data=${encodeURIComponent(encryptedData)}`);
       }
     },
     onError: (error) => {
@@ -237,7 +237,7 @@ const PaymentForm = ({
       billing_address: formattedAddress,
       paymentMethod,
     });
-    
+
   };
 
   const handleClose = () => {
@@ -279,14 +279,14 @@ const PaymentForm = ({
             <span>Donation Amount</span>
             <span>£{parseFloat(amount).toFixed(2)}</span>
           </div>
-          
+
           {coverTransactionFee && (
             <div className="flex justify-between text-base md:text-lg mt-1 md:mt-2">
               <span>Transaction Fee</span>
               <span>£{stripeFee.toFixed(2)}</span>
             </div>
           )}
-          
+
           <div className="flex justify-between text-base md:text-lg mt-3 md:mt-4 font-bold">
             <span>Total</span>
             <span>£{totalAmount.toFixed(2)}</span>
@@ -300,13 +300,12 @@ const PaymentForm = ({
   return (
     <div className={`fixed inset-0 z-50 ${isPaymentGatewayOpen ? "flex" : "hidden"} bg-black/95 overflow-hidden`}>
       {/* Mobile Summary Drawer - only visible on small screens when toggled */}
-      <div 
-        className={`fixed inset-0 bg-black/90 z-20 transition-transform duration-300 ${
-          showMobileSummary ? "translate-y-0" : "translate-y-full"
-        } md:hidden`}
+      <div
+        className={`fixed inset-0 bg-black/90 z-20 transition-transform duration-300 ${showMobileSummary ? "translate-y-0" : "translate-y-full"
+          } md:hidden`}
       >
         <div className="h-full p-4 pt-12 pb-24 overflow-y-auto">
-          <button 
+          <button
             className="absolute top-4 right-4 p-2 bg-gray-800 rounded-full text-white"
             onClick={toggleMobileSummary}
             aria-label="Close summary"
