@@ -81,7 +81,7 @@ const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
       <div className="flex items-center justify-between">
       <div className="space-y-6">
       <BackButton onClick={onBack} />
-      <h2 className="text-2xl font-bold text-gray-900">Select a Program</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Select a Donation</h2>
         </div>
       </div>
 
