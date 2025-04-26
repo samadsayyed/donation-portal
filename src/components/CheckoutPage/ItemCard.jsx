@@ -13,7 +13,7 @@ const ItemCard = ({ item, updateQuantity, removeItem, showParticipantInput }) =>
     {/* Item Details */}
     <div className="flex-grow min-w-0">
       <h3 className="font-medium text-black text-sm truncate">{item.program_name}</h3>
-      <p className="text-gray-900 text-xs">£{item.donation_amount}</p>
+      <p className="text-grey text-xs">£{item.donation_amount}</p>
 
       {/* Quantity Controls & Remove Button */}
       <div className="flex items-center mt-1 gap-2">

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPafData } from "../../api/paf";
 
-export const PAFPopup = ({ show, onClose, postcode, setDonation, donation }) => {
+export const FindAddressPopup = ({ show, onClose, postcode, setDonation, donation }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     // ✅ Ensure `useQuery` always runs and handles undefined data
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["paf_data", postcode],
+        queryKey: ["address_data", postcode],
         queryFn: () => getPafData(postcode),
         enabled: !!postcode, // Fetch only if postcode exists
         refetchInterval: 300000,
@@ -23,7 +23,7 @@ export const PAFPopup = ({ show, onClose, postcode, setDonation, donation }) => 
         : [];
 
     const handleSelectAddress = (address) => {
-        
+
         setDonation((prev) => ({
             ...prev,
             personalInfo: {

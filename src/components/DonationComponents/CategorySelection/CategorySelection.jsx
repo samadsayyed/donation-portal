@@ -1,19 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { fetchCategories } from '../../../api/categoryApi';
 import DonationCard from '../common/DonationCard';
 import SearchableList from '../common/SearchableList';
 import ErrorMessage from '../Error/ErrorMessage';
 import SkeletonCard from '../Loading/SkeletonCard';
 
-const CategorySelection = ({ onSelect }) => {
-  const {data:categories,isLoading,isError} = useQuery({
+const CategorySelection = ({ onSelect,setStep }) => {
+  const { data: categories, isLoading, isError } = useQuery({
     queryKey: ['categories'],
     queryFn: fetchCategories,
     staleTime: 50 * 60 * 1000, // Consider data fresh for 50 minutes
     refetchInterval: 50 * 60 * 1000, // Auto-refetch every 50 minutes
   });
-  
+
+  useEffect(() => {
+    // Fetch categories when the component mounts
+    setStep((step)=>step+1);
+  }, []);
+
 
   const renderContent = () => {
     if (isLoading) {
@@ -56,8 +61,8 @@ const CategorySelection = ({ onSelect }) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Choose a Category</h2>
-      {renderContent()}
+      {/* <h2 className="text-2xl font-bold text-grey">Choose a Category</h2>
+      {renderContent()} */}
     </div>
   );
 };

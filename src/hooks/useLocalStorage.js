@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useLocalStorage = (key, initialValue) => {
   // Get initial value from localStorage or use provided initialValue
@@ -15,8 +15,7 @@ const useLocalStorage = (key, initialValue) => {
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [key, value]);
 
   return [value, setValue];

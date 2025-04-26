@@ -9,8 +9,8 @@ export const createCart = async (cartData) => {
   return response.data;
 };
 
-export const getCart = async (session_id) => {
-  const res = await api.post("/cart/cart", { session_id });
+export const getCart = async (data) => {
+  const res = await api.post("/cart/cart", data);
 
   return res.data.cart;
 };
@@ -28,7 +28,17 @@ export const deleteFromCart = async (data) => {
   return res.data;
 };
 
+export const updateParticipant = async (data) => {
+  const res = await api.post("/cart/update-participant", {
+    cart_id: data.cart_id,
+    participant_name: data.participant_name
+  });
+  return res.data;
+};
+
 export const cartTransaction = async (data) => {
+
+
   const guest_details = {
     title: data.personalInfo.title,
     first_name: data.personalInfo.firstName,
@@ -45,10 +55,18 @@ export const cartTransaction = async (data) => {
   };
 
   const form_Data = new FormData();
-  form_Data.append("auth", 0);
-  form_Data.append("session_id", data.session);
+
+  if(data.isAuthenticated){
+    form_Data.append("auth", 1);
+    form_Data.append("donor_id", data.user.user_id);
+    form_Data.append("donor_address_id", data.personalInfo.address_id);
+  }else{
+    form_Data.append("auth", 0);
+    form_Data.append("session_id", data.session);
+    // form_Data.append("reference_no", data.referenceId);
+    form_Data.append("guest_details", JSON.stringify(guest_details));
+  }
   form_Data.append("reference_no", data.referenceId);
-  form_Data.append("guest_details", JSON.stringify(guest_details));
   form_Data.append("payment_method", "");
   form_Data.append("is_giftaid", data.giftAid ? "Y" : "N");
   form_Data.append("tele_calling", data.phone ? "Y" : "N");
@@ -56,6 +74,7 @@ export const cartTransaction = async (data) => {
   form_Data.append("send_mail", data.post ? "Y" : "N");
   form_Data.append("send_text", data.sms ? "Y" : "N");
   form_Data.append("client_id", 1);
+  
   try {
     // const response = await api.post(`payment/transaction`, form_Data);
 

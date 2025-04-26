@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import DonationCard from '../common/DonationCard';
 import SkeletonCard from '../Loading/SkeletonCard';
 import ErrorMessage from '../Error/ErrorMessage';
-import BackButton from '../common/BackButton';
 import SearchableList from '../common/SearchableList';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCountries } from '../../../api/countiesApi';
 
-const CountrySelection = ({ category, onSelect, onBack,setStep ,program}) => {
+const CountrySelection = ({ category, onSelect, onBack, setStep, program }) => {
 
-  
-
-  const {data,isLoading,isError,error} = useQuery({
-    queryKey: ['counties',program],
-    queryFn: ()=>fetchCountries(program),
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['counties', program],
+    queryFn: () => fetchCountries(program),
     staleTime: 50 * 60 * 1000, // Consider data fresh for 50 minutes
     refetchInterval: 50 * 60 * 1000, // Auto-refetch every 50 minutes
   });
 
   const counties = data?.country
 
-  if(counties?.length == 0) setStep(4)
+  // Move the state update to useEffect to avoid updating state during render
+  useEffect(() => {
+    if (counties?.length === 0) {
+      setStep(5);
+    }
+  }, [counties, setStep]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -56,8 +58,7 @@ const CountrySelection = ({ category, onSelect, onBack,setStep ,program}) => {
 
   return (
     <div className="space-y-6">
-      <BackButton onClick={onBack} />
-      <h2 className="text-2xl font-bold text-gray-900">Select a Country</h2>
+      <h2 className="text-2xl font-bold text-grey">Select a Country</h2>
       {renderContent()}
     </div>
   );

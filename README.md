@@ -1,8 +1,45 @@
-# React + Vite
+# Global Care Foundation - Donation Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, secure donation portal built with React and Vite for Global Care Foundation. This portal allows donors to make charitable contributions easily and securely.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Secure payment processing with Stripe and PayPal
+- Gift Aid declaration for UK taxpayers
+- Multiple donation options and amounts
+- Mobile-responsive design
+- Secure data handling
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables (copy .env.example to .env and fill in your values)
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## Tech Stack
+
+- React 18
+- Vite
+- TailwindCSS
+- Stripe/PayPal Integration
+- React Query
+- Framer Motion
+
+## License
+
+Private - All rights reserved
+"# zobia-donation-portal"

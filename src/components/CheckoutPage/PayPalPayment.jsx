@@ -6,12 +6,15 @@ import { createSingleDonation } from "../../api/donationApi";
 import useSessionId from "../../hooks/useSessionId";
 import { useNavigate } from "react-router-dom";
 import { encryptData } from "../../utils/functions";
+import { useAuth } from "../../context/AuthContext";
 
 const PayPalPayment = ({ reference_no, onSuccess }) => {
   const session = useSessionId();
   const navigate = useNavigate();
   const [coverFee, setCoverFee] = useState(true);
   const [totalAmount, setTotalAmount] = useState("0.00");
+
+  const { user, isAuthenticated } = useAuth();
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const amount = cartItems
@@ -21,9 +24,6 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
       0
     )
     .toFixed(2);
-
-
-  console.log(parseFloat(totalAmount).toFixed(2), "===========");
 
 
   // PayPal discounted transaction fees for UK charities
@@ -133,10 +133,16 @@ const PayPalPayment = ({ reference_no, onSuccess }) => {
                   payment_mode_code: "PAYPAL",
                   auth_code: "",
                   reference_no,
-                  auth: 0,
-                  session_id: session,
                   covered_fee: coverFee, // Indicate if the donor chose to cover the fee
                 };
+
+                if(isAuthenticated){
+                  donationData.donor_id = user.user_id;
+                  donationData.auth = 1;
+                }else{
+                  donationData.session_id = session;
+                  donationData.auth = 0;
+                }
 
                 createDonation.mutate(donationData);
               });

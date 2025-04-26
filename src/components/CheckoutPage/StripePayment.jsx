@@ -1,12 +1,13 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { ChevronLeft } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPaymentIntent, createSingleDonation } from "../../api/donationApi";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useSessionId from "../../hooks/useSessionId";
 import { useNavigate } from "react-router-dom";
 import { encryptData } from "../../utils/functions";
+import { useAuth } from "../../context/AuthContext";
 
 // ISO 3166-1 alpha-2 country codes
 const countryCodes = [
@@ -56,13 +57,16 @@ const PaymentForm = ({
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  // New state for the cover fee checkbox
   const [coverTransactionFee, setCoverTransactionFee] = useState(true);
-  // State to handle mobile view summary toggle
   const [showMobileSummary, setShowMobileSummary] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [stripeFee, setStripeFee] = useState(0);
+  const showCoverFee = import.meta.env.VITE_ENABLE_COVER_FEE === "true";
 
   const navigate = useNavigate();
   const session = useSessionId();
+
+  const { user, isAuthenticated } = useAuth();
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const amount = cartItems
@@ -78,12 +82,12 @@ const PaymentForm = ({
     return (donationAmount * feePercentage) + fixedFee + additionalFeee;
   };
 
-  const stripeFee = calculateStripeFee(parseFloat(amount));
-
-  // Calculate total amount including fee if the user opts to cover it
-  const totalAmount = coverTransactionFee
-    ? parseFloat(amount) + stripeFee
-    : parseFloat(amount);
+  // Update stripe fee and total amount when amount or coverTransactionFee changes
+  useEffect(() => {
+    const calculatedFee = calculateStripeFee(parseFloat(amount));
+    setStripeFee(calculatedFee);
+    setTotalAmount(coverTransactionFee ? parseFloat(amount) + calculatedFee : parseFloat(amount));
+  }, [amount, coverTransactionFee]);
 
   const createDonation = useMutation({
     mutationFn: createSingleDonation,
@@ -161,13 +165,17 @@ const PaymentForm = ({
         payment_mode_code: "STRIPE",
         auth_code: "",
         reference_no: reference_no,
-        auth: 0,
-        session_id: session,
+        auth: isAuthenticated ? true : false,
         donor_name: variables.name,
         donor_address: formattedAddress,
-        donor_email: email,
-        covered_fees: coverTransactionFee ? "Yes" : "No"
+        donor_email: email
       };
+
+      if (isAuthenticated) {
+        donationData.donor_id = user.user_id;
+      } else {
+        donationData.session_id = session;
+      }
 
       createDonation.mutate(donationData);
     },
@@ -205,7 +213,7 @@ const PaymentForm = ({
           line2: address.line2,
           city: address.city,
           postal_code: address.postalCode,
-          country: address.country, // Using ISO country code
+          country: address.country,
         },
       },
     });
@@ -237,7 +245,6 @@ const PaymentForm = ({
       billing_address: formattedAddress,
       paymentMethod,
     });
-
   };
 
   const handleClose = () => {
@@ -478,24 +485,26 @@ const PaymentForm = ({
                 </div>
               </div>
 
-              {/* Transaction Fee Option */}
-              <div className="bg-gray-50 px-4 md:px-6 py-3 md:py-4 rounded-lg">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="coverFee"
-                      type="checkbox"
-                      checked={coverTransactionFee}
-                      onChange={(e) => setCoverTransactionFee(e.target.checked)}
-                      className="w-4 h-4 border border-gray-300 rounded focus:ring-3 focus:ring-blue-300"
-                    />
-                  </div>
-                  <div className="ml-3 text-xs md:text-sm">
-                    <label htmlFor="coverFee" className="font-medium text-gray-700">Cover transaction fee</label>
-                    <p className="text-gray-500">Add £{stripeFee.toFixed(2)} to cover Stripe's processing fee</p>
+              {/* Transaction Fee Option - Only show if enabled in env */}
+              {showCoverFee && (
+                <div className="bg-gray-50 px-4 md:px-6 py-3 md:py-4 rounded-lg">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="coverFee"
+                        type="checkbox"
+                        checked={coverTransactionFee}
+                        onChange={(e) => setCoverTransactionFee(e.target.checked)}
+                        className="w-4 h-4 border border-gray-300 rounded focus:ring-3 focus:ring-blue-300"
+                      />
+                    </div>
+                    <div className="ml-3 text-xs md:text-sm">
+                      <label htmlFor="coverFee" className="font-medium text-gray-700">Cover transaction fee</label>
+                      <p className="text-gray-500">Add £{stripeFee.toFixed(2)} to cover Stripe's processing fee</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Payment Information */}
               <div className="bg-gray-50 px-4 md:px-6 py-3 md:py-4 rounded-lg">

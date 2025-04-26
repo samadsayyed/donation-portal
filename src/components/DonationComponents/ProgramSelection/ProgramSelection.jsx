@@ -2,15 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import React, { useState } from 'react';
 import { fetchPrograms } from '../../../api/programsApi';
-import BackButton from '../common/BackButton';
 import DonationCard from '../common/DonationCard';
 import SearchableList from '../common/SearchableList';
 import ErrorMessage from '../Error/ErrorMessage';
 import SkeletonCard from '../Loading/SkeletonCard';
 
-const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
-
-  const { data, isLoading, isError ,error} = useQuery({
+const ProgramSelection = ({ category, onBack, setStep, setSelectedProgram, setSelectedCountry }) => {
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['programs', category],
     queryFn: fetchPrograms,
     staleTime: 50 * 60 * 1000,
@@ -20,11 +18,11 @@ const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
   const programs = data?.program;
 
   const handleSelect = (program) => {
-    
     setSelectedProgram(program.program_id);
-      setStep(3)
+    // Skip country selection if program has no countries or is local
+    setSelectedCountry("")
+    setStep(4);
   };
-
 
   const renderContent = () => {
     if (isLoading) {
@@ -40,9 +38,9 @@ const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
     if (isError) {
       return (
         <div className="flex justify-center items-center min-h-[400px]">
-          <ErrorMessage 
-            message={error} 
-            onRetry={() => window.location.reload()} 
+          <ErrorMessage
+            message={error}
+            onRetry={() => window.location.reload()}
           />
         </div>
       );
@@ -53,7 +51,7 @@ const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
         <SearchableList
           items={programs}
           renderItem={(program) => (
-            <div 
+            <div
               className="transform transition-all duration-200 hover:scale-[1.02]"
               key={program.program_id}
             >
@@ -79,14 +77,11 @@ const ProgramSelection = ({ category, onBack ,setStep,setSelectedProgram }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <div className="flex items-center justify-between">
-      <div className="space-y-6">
-      <BackButton onClick={onBack} />
-      <h2 className="text-2xl font-bold text-gray-900">Select a Donation</h2>
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-grey">Select a Donation</h2>
         </div>
       </div>
-
       {renderContent()}
-
     </div>
   );
 };

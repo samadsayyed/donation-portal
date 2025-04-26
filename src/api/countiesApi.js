@@ -1,7 +1,6 @@
 import api from "./axios";
 
 export const fetchCountries = async (program) => {
-  
   try {
     const response = await api.get(`/country/${program}`);
     return response.data;
@@ -10,7 +9,6 @@ export const fetchCountries = async (program) => {
     throw error;
   }
 };
-
 
 export const fetchCountriesList = async () => {
   const { data } = await api.get(`/country`);

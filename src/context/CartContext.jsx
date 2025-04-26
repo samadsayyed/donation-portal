@@ -39,7 +39,7 @@ const CartAnimation = () => {
           onAnimationComplete={() => setShowAnimation(false)}
         >
           <div className="bg-white rounded-full p-4 shadow-lg">
-            <ShoppingCart className="text-blue-600 w-8 h-8" />
+            <ShoppingCart className="text-primary w-8 h-8" />
           </div>
         </motion.div>
       )}

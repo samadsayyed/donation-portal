@@ -3,6 +3,7 @@ import { Mail, Phone, MessageSquare, Mailbox, Info, AlertCircle, Check } from "l
 
 const CompactGiftAid = ({ preferences, setPreferences }) => {
   const [showFeeInfo, setShowFeeInfo] = useState(false);
+  const showCoverFee = import.meta.env.VITE_ENABLE_COVER_FEE === "true";
 
   // Initialize localStorage on component mount
   useEffect(() => {
@@ -50,7 +51,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
             <p className="text-sm text-gray-600 mt-1">
               UK taxpayer? Add Gift Aid at no extra cost to you
             </p>
-            
+
             <div className="mt-3 flex items-center">
               <input
                 type="checkbox"
@@ -67,59 +68,13 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
         </div>
       </div>
 
-      {/* Transaction Fee Section
-      <div className="bg-white border border-gray-200 rounded-lg p-4">
-        <div className="flex items-start">
-          <div className="mr-3 mt-1">
-            <AlertCircle size={18} className="text-primary" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-md font-semibold text-primary">Cover transaction costs</h3>
-              <button 
-                onClick={() => setShowFeeInfo(!showFeeInfo)}
-                className="text-secondary hover:text-secondaryDark focus:outline-none"
-                aria-label="Toggle transaction fee information"
-              >
-                <Info size={16} />
-              </button>
-            </div>
-            
-            {showFeeInfo && (
-              <div className="mt-2 mb-3 bg-gray-50 border-l-2 border-secondary p-2 rounded text-xs text-gray-700">
-                <p>Every transaction incurs a 1.25% processing fee from our payment provider. By covering this fee, you ensure 100% of your intended donation amount reaches those in need.</p>
-                <p className="mt-1">For a £100 donation, this would mean adding just £1.25 to cover costs.</p>
-              </div>
-            )}
-            
-            <div className="mt-2 flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="transaction-fee"
-                  checked={preferences.coverFee || false}
-                  onChange={(e) =>
-                    setPreferences((prev) => ({ ...prev, coverFee: e.target.checked }))
-                  }
-                  className="w-4 h-4 rounded border-gray-300 text-secondary focus:ring-secondary"
-                />
-                <label htmlFor="transaction-fee" className="ml-2 text-sm">
-                  Yes, I'll cover the 1.25% transaction fee 
-                  {preferences.donationAmount && (
-                    <span className="text-secondary font-medium"> (£{calculateFee()})</span>
-                  )}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+     
 
       {/* Communication Preferences */}
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
           <h3 className="text-md font-semibold mb-1 sm:mb-0">Stay updated via:</h3>
-          
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -149,13 +104,12 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
               onClick={() =>
                 setPreferences((prev) => ({ ...prev, [key]: !prev[key] }))
               }
-              className={`flex flex-col items-center p-3 rounded-lg border ${
-                preferences[key]
-                  ? "border-secondary bg-secondary bg-opacity-5"
+              className={`flex flex-col items-center p-3 rounded-lg border ${preferences[key]
+                  ? "border-primary bg-primary bg-opacity-5"
                   : "border-gray-200 bg-gray-50 hover:bg-gray-100"
-              } cursor-pointer transition-all duration-200`}
+                } cursor-pointer transition-all duration-200`}
             >
-              <Icon size={18} className={preferences[key] ? "text-secondary" : "text-gray-500"} />
+              <Icon size={18} className={preferences[key] ? "text-primary" : "text-gray-500"} />
               <span className="mt-1 text-sm">{label}</span>
             </div>
           ))}
@@ -163,7 +117,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
       </div>
 
       {/* Legal Text */}
-      <div className="text-xs text-gray-500 leading-relaxed bg-gray-50 p-3 rounded-lg">
+      <div className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg">
         <p>
           <span className="font-medium">Gift Aid:</span> By checking Gift Aid, I confirm I am a UK taxpayer and understand I must pay Income/Capital Gains Tax equal to the Gift Aid claimed.
         </p>
@@ -171,7 +125,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
           <span className="font-medium">Communication:</span> We protect your data and only contact you according to your preferences. See our Privacy Policy for details.
         </p>
         <p className="mt-1">
-          For any questions or to update your preferences, contact <span className="text-secondary">info@zobiatrust.org</span>
+          For any questions or to update your preferences, contact <span className="text-secondary">info@globalcarefoundation.org</span>
         </p>
       </div>
     </div>

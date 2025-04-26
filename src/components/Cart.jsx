@@ -6,21 +6,28 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { deleteFromCart, getCart, updateCart } from '../api/cartApi';
 import useSessionId from '../hooks/useSessionId';
+import { useAuth } from '../context/AuthContext';
 
 // Cart Component
-const Cart = ({isOpen, setIsOpen,render,setRender}) => {
+const Cart = ({ isOpen, setIsOpen, render, setRender }) => {
   const sessionId = useSessionId();
+  const { user, isAuthenticated } = useAuth();
 
   const { data = [], isLoading, isError, refetch } = useQuery({
-    queryKey: ["cart", sessionId],
-    queryFn: async () => (sessionId ? await getCart(sessionId) : []),
-    enabled: !!sessionId,
+    queryKey: ["cart", isAuthenticated ? user?.user_id : sessionId],
+    queryFn: async () => {
+      if (isAuthenticated && user?.user_id) {
+        return await getCart({ donor_id: user.user_id, session_id: '' });
+      }
+      return sessionId ? await getCart({ session_id: sessionId, donor_id: '' }) : [];
+    },
+    enabled: isAuthenticated ? !!user?.user_id : !!sessionId,
     refetchInterval: 300000,
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     refetch()
-  },[isOpen])
+  }, [isOpen])
 
   const quantityMutation = useMutation({
     mutationFn: updateCart,
@@ -64,26 +71,14 @@ const Cart = ({isOpen, setIsOpen,render,setRender}) => {
   };
 
   return (
-    <div className="fixed top-3 right-3 z-10">
-      <button
-        onClick={() => {
-          setIsOpen(true);
-          refetch();
-        }}
-        className="px-4 py-4 bg-primary text-white rounded-full hover:bg-gray-800 transition-colors z-50"
-      >
-        <ShoppingCart />
-      </button>
-
-      <CartSidebar
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        cartItems={data}
-        isLoading={isLoading}
-        updateQuantity={updateQuantity}
-        onDelete={handleDelete}
-      />
-    </div>
+    <CartSidebar
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      cartItems={data}
+      isLoading={isLoading}
+      updateQuantity={updateQuantity}
+      onDelete={handleDelete}
+    />
   );
 };
 
@@ -108,19 +103,19 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40 pb-28 samad">
           <motion.div
             ref={sidebarRef}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-96 max-w-full md:w-96 bg-gray-50/95 backdrop-blur-xl shadow-2xl z-50"
+            className="fixed right-0 top-0 h-full w-96 max-w-full md:w-96 bg-gray-50/95 backdrop-blur-xl shadow-2xl z-50 "
           >
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-[calc(100vh-5rem)] md:h-full">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900">Your Cart</h2>
+                <h2 className="text-xl font-semibold text-grey">Your Cart</h2>
                 <button
                   onClick={onClose}
                   className="p-2 hover:bg-gray-200 rounded-full transition-colors"
@@ -154,7 +149,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-medium text-gray-900">{item.program_name}</h3>
+                          <h3 className="font-medium text-grey">{item.program_name}</h3>
                         </div>
                         <p className="text-sm text-gray-500">£{item.donation_amount}</p>
                         <div className="flex items-center gap-3 mt-2">
@@ -231,7 +226,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, onDelete, isL
     </>
   );
 };
-
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
