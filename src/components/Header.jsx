@@ -68,7 +68,7 @@ const Header = ({ setIsOpen }) => {
         <div className="container mx-auto px-4 select-none">
           <div className="flex justify-between items-center py-4">
             <Link
-              to="/"
+              to="https://zobiatrust.org"
               className="flex items-center justify-center"
             >
               <img
