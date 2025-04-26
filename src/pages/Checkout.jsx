@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import DonationCart from "../components/CheckoutPage/DonationCart";
-import GiftAid from "../components/CheckoutPage/GiftAid.jsx";
+import { GiftAid } from "../components/CheckoutPage/GiftAid.jsx";
 import PersonalInfo from "../components/CheckoutPage/PersonalInfo";
 import StepIndicator from "../components/CheckoutPage/StepIndicator";
 import { fetchCountriesList } from "../api/countiesApi";

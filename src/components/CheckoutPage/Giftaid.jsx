@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Mail, Phone, MessageSquare, Mailbox, Info, AlertCircle, Check } from "lucide-react";
 
-const GiftAid = ({ donation, setDonation, preferences, setPreferences }) => {
+export const GiftAid = ({ donation, setDonation, preferences, setPreferences }) => {
   const [showFeeInfo, setShowFeeInfo] = useState(false);
   const showCoverFee = import.meta.env.VITE_ENABLE_COVER_FEE === "true";
 
@@ -131,5 +131,3 @@ const GiftAid = ({ donation, setDonation, preferences, setPreferences }) => {
     </div>
   );
 };
-
-export default GiftAid;
