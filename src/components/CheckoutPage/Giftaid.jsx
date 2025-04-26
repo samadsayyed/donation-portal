@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Mail, Phone, MessageSquare, Mailbox, Info, AlertCircle, Check } from "lucide-react";
 
-const CompactGiftAid = ({ preferences, setPreferences }) => {
+const GiftAid = ({ donation, setDonation, preferences, setPreferences }) => {
   const [showFeeInfo, setShowFeeInfo] = useState(false);
   const showCoverFee = import.meta.env.VITE_ENABLE_COVER_FEE === "true";
 
@@ -16,7 +16,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
   // Save to localStorage whenever preferences change
   useEffect(() => {
     localStorage.setItem('donationPreferences', JSON.stringify(preferences));
-  }, [preferences]); 
+  }, [preferences]);
 
   const toggleAll = (checked) => {
     setPreferences((prev) => ({
@@ -68,7 +68,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
         </div>
       </div>
 
-     
+
 
       {/* Communication Preferences */}
       <div className="bg-white border border-gray-200 rounded-lg p-4">
@@ -105,8 +105,8 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
                 setPreferences((prev) => ({ ...prev, [key]: !prev[key] }))
               }
               className={`flex flex-col items-center p-3 rounded-lg border ${preferences[key]
-                  ? "border-primary bg-primary bg-opacity-5"
-                  : "border-gray-200 bg-gray-50 hover:bg-gray-100"
+                ? "border-primary bg-primary bg-opacity-5"
+                : "border-gray-200 bg-gray-50 hover:bg-gray-100"
                 } cursor-pointer transition-all duration-200`}
             >
               <Icon size={18} className={preferences[key] ? "text-primary" : "text-gray-500"} />
@@ -132,4 +132,4 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
   );
 };
 
-export default CompactGiftAid;
+export default GiftAid;

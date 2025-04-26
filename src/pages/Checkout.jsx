@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import DonationCart from "../components/CheckoutPage/DonationCart";
-import GiftAid from "../components/CheckoutPage/GiftAid.jsx";
+import GiftAid from "../components/CheckoutPage/GiftAid";
 import PersonalInfo from "../components/CheckoutPage/PersonalInfo";
 import StepIndicator from "../components/CheckoutPage/StepIndicator";
 import { fetchCountriesList } from "../api/countiesApi";
@@ -81,29 +81,29 @@ const DonationWizard = () => {
       localStorage.setItem("userData", JSON.stringify({ ...donation, cart }));
 
       // Find missing required fields
-      // Get and sanitize phone number
-      const rawPhone = updatedDonation.personalInfo?.phone?.trim() || "";
-      const cleanedPhone = rawPhone.replace(/[^\d]/g, ""); // remove all non-digit characters
+       // Get and sanitize phone number
+  const rawPhone = updatedDonation.personalInfo?.phone?.trim() || "";
+  const cleanedPhone = rawPhone.replace(/[^\d]/g, ""); // remove all non-digit characters
 
-      if (!rawPhone) {
-        toast.error("Phone number is required.");
-        return;
-      }
+  if (!rawPhone) {
+    toast.error("Phone number is required.");
+    return;
+  }
 
-      if (cleanedPhone.length < 10 || cleanedPhone.length > 15) {
-        toast.error("Phone number must be between 10 to 15 digits.");
-        return;
-      }
+  if (cleanedPhone.length < 10 || cleanedPhone.length > 15) {
+    toast.error("Phone number must be between 10 to 15 digits.");
+    return;
+  }
 
-      // Check for other missing required fields
-      const missingFields = requiredFields.filter(
-        (field) => !updatedDonation.personalInfo?.[field]
-      );
+  // Check for other missing required fields
+  const missingFields = requiredFields.filter(
+    (field) => !updatedDonation.personalInfo?.[field]
+  );
 
-      if (missingFields.length > 0) {
-        toast.error(`Missing required fields: ${missingFields.join(", ")}`);
-        return;
-      }
+  if (missingFields.length > 0) {
+    toast.error(`Missing required fields: ${missingFields.join(", ")}`);
+    return;
+  }
 
       setIsSubmitted(true);
       toast.loading("Processing...");
