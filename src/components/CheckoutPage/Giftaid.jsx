@@ -16,7 +16,7 @@ const CompactGiftAid = ({ preferences, setPreferences }) => {
   // Save to localStorage whenever preferences change
   useEffect(() => {
     localStorage.setItem('donationPreferences', JSON.stringify(preferences));
-  }, [preferences]);
+  }, [preferences]); 
 
   const toggleAll = (checked) => {
     setPreferences((prev) => ({
