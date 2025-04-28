@@ -12,7 +12,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep,amount 
   const [selectedAmount, setSelectedAmount] = useState(amount);
   const [amountError, setAmountError] = useState('');
 
-  const predefinedAmounts = [10, 20, 50, 100, 200];
+  const predefinedAmounts = [10, 20, 50, 100, 200] ;
 
   const {
     data: programRate,
