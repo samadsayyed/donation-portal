@@ -76,6 +76,8 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
     if (country) setSelectedCountry(country);
     if (amount) setAmount(amount);
 
+    console.log("amounty", amount);
+
     // If all parameters exist, skip to the amount selection step
     if (category && program && type === "one-off") {
       setStep(5);
@@ -267,6 +269,8 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
                 onSelect={handleCountrySelect}
                 setStep={setStep}
                 onBack={handleBack}
+                amount={amount}
+                setAmount={setAmount}
                 handleAmountSelect={handleAmountSelect}
               />
             )}

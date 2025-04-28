@@ -5,11 +5,11 @@ import ErrorMessage from '../Error/ErrorMessage';
 import SkeletonCard from '../Loading/SkeletonCard';
 import { fetchProgramRate } from '../../../api/programsApi';
 
-const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep }) => {
+const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep,amount }) => {
   const { selectedCategory, selectedCountry, selectedProgram } = prevData;
 
-  const [customAmount, setCustomAmount] = useState('');
-  const [selectedAmount, setSelectedAmount] = useState(null);
+  const [customAmount, setCustomAmount] = useState(amount);
+  const [selectedAmount, setSelectedAmount] = useState(amount);
   const [amountError, setAmountError] = useState('');
 
   const predefinedAmounts = [10, 20, 50, 100, 200];
