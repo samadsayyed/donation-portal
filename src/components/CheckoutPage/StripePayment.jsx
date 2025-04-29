@@ -305,13 +305,13 @@ const PaymentForm = ({
   );
 
   return (
-    <div className={`fixed inset-0 z-50 ${isPaymentGatewayOpen ? "flex" : "hidden"} bg-black/95 overflow-hidden`}>
+    <div className={`fixed inset-0 z-50 ${isPaymentGatewayOpen ? "flex" : "hidden"} bg-black/95`}>
       {/* Mobile Summary Drawer - only visible on small screens when toggled */}
       <div
         className={`fixed inset-0 bg-black/90 z-20 transition-transform duration-300 ${showMobileSummary ? "translate-y-0" : "translate-y-full"
-          } md:hidden`}
+          } md:hidden overflow-y-auto`}
       >
-        <div className="h-full p-4 pt-12 pb-24 overflow-y-auto">
+        <div className="h-full p-4 pt-12 pb-24">
           <button
             className="absolute top-4 right-4 p-2 bg-gray-800 rounded-full text-white"
             onClick={toggleMobileSummary}
@@ -326,9 +326,9 @@ const PaymentForm = ({
         </div>
       </div>
 
-      <div className="w-full h-full md:grid md:grid-cols-2 overflow-hidden">
+      <div className="w-full h-full md:grid md:grid-cols-2 overflow-y-auto">
         {/* Left Section - Order Summary (hidden on mobile) */}
-        <div className="hidden md:flex h-full p-6 md:p-8 lg:p-12 flex-col">
+        <div className="hidden md:flex h-full p-6 md:p-8 lg:p-12 flex-col overflow-y-auto">
           <div className="flex items-center gap-4 mb-6 md:mb-8">
             <button
               className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
@@ -364,7 +364,7 @@ const PaymentForm = ({
           </div>
 
           {/* Mobile Total Summary Bar - Sticky at bottom */}
-          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex justify-between items-center z-10">
+          <div className="md:hidden sticky bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex justify-between items-center z-10">
             <span className="text-sm">Total: <span className="font-bold">£{totalAmount.toFixed(2)}</span></span>
             <button
               type="button"
