@@ -61,7 +61,7 @@ const PaymentForm = ({
   const [showMobileSummary, setShowMobileSummary] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [stripeFee, setStripeFee] = useState(0);
-  const showCoverFee = import.meta.env.VITE_ENABLE_COVER_FEE === "true";
+  const showCoverFee = "true";
 
   const navigate = useNavigate();
   const session = useSessionId();
