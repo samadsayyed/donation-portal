@@ -70,7 +70,7 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
     const type = searchParams.get("type");
 
     // if (!country) country = "19"; // Set country to 19 if not defined
-
+    if (type) setSelectedPeriod(type);
     if (category) setSelectedCategory(category);
     if (program) setSelectedProgram(program);
     if (country) setSelectedCountry(country);
