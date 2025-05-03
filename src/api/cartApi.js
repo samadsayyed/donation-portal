@@ -11,7 +11,6 @@ export const createCart = async (cartData) => {
 
 export const getCart = async (data) => {
   const res = await api.post("/cart/cart", data);
-
   return res.data.cart;
 };
 
