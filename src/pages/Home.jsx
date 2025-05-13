@@ -174,10 +174,10 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
         console.log("selected country is not empty");
         setStep(step - 1);
       }
-    } else if(step === 3){
+    } else if (step === 3) {
       setStep(step - 2);
       // setSelectedCountry("");
-    } else{
+    } else {
       setStep(step - 1);
     }
   };
@@ -194,26 +194,26 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
           </header>
 
           <div className="mb-8">
-  <div className="flex items-center justify-between mb-2">
-    <span className="text-sm font-medium text-gray-700">
-      Step {step >= 3 ? step - 2 : step} of 3
-    </span>
-    <span className="text-sm font-medium text-gray-700">
-      {step === 1 && "Donation Period"}
-      {step === 2 && "Program"}
-      {step === 3 && "Country"}
-      {step === 4 && "Amount"}
-    </span>
-  </div>
-  <div className="h-2 bg-gray-200 rounded-full">
-    <motion.div
-      className="h-full bg-primary rounded-full"
-      initial={{ width: 0 }}
-      animate={{ width: `${((step >= 3 ? step - 1 : step) / 4) * 100}%` }}
-      transition={{ duration: 0.3 }}
-    />
-  </div>
-</div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">
+              Step {step >= 4 ? 3 : step === 3 ? 2 : step} of 3
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {step === 1 && "Donation Period"}
+                {step === 2 && "Program"}
+                {step === 3 && "Country"}
+                {step === 4 && "Amount"}
+              </span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full">
+              <motion.div
+                className="h-full bg-primary rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${((step >= 3 ? step - 1 : step) / 4) * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
 
 
           {step > 1 && (
