@@ -78,60 +78,42 @@ const Header = ({ setIsOpen }) => {
               />
             </Link>
 
-            <div className="hidden md:flex items-center gap-4">
-              {isAuthenticated ? (
-                <>
-                  <Link
-                    to="/profile"
-                    className="group relative p-2 text-grey hover:text-customBeige transition-colors"
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-maroon text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Profile
-                    </span>
-                  </Link>
-                  <button
-                    onClick={logout}
-                    className="group relative p-2 text-grey hover:text-customBeige transition-colors"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-maroon text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Logout
-                    </span>
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="group relative p-2 text-grey hover:text-customBeige transition-colors"
-                  >
-                    <LogIn className="w-5 h-5" />
-                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-maroon text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Login
-                    </span>
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="group relative p-2 text-grey hover:text-customBeige transition-colors"
-                  >
-                    <UserPlus className="w-5 h-5" />
-                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-maroon text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                      Sign up
-                    </span>
-                  </Link>
-                </>
-              )}
-              <button
-                onClick={handleCartClick}
-                className="group relative p-2 text-grey hover:text-customBeige transition-colors"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-maroon text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  Cart
-                </span>
-              </button>
-            </div>
+            <div className="hidden md:flex items-center gap-6">
+  {isAuthenticated ? (
+    <>
+      <Link to="/profile" className="flex items-center gap-2 text-grey hover:text-customBeige transition-colors">
+        <User className="w-5 h-5" />
+        <span className="hidden md:inline text-sm">Profile</span>
+      </Link>
+      <button
+        onClick={logout}
+        className="flex items-center gap-2 text-grey hover:text-customBeige transition-colors"
+      >
+        <LogOut className="w-5 h-5" />
+        <span className="hidden md:inline text-sm">Logout</span>
+      </button>
+    </>
+  ) : (
+    <>
+      <Link to="/login" className="flex items-center gap-2 text-grey hover:text-customBeige transition-colors">
+        <LogIn className="w-5 h-5" />
+        <span className="hidden md:inline text-sm">Login</span>
+      </Link>
+      <Link to="/signup" className="flex items-center gap-2 text-grey hover:text-customBeige transition-colors">
+        <UserPlus className="w-5 h-5" />
+        <span className="hidden md:inline text-sm">Signup</span>
+      </Link>
+    </>
+  )}
+  <button
+    onClick={handleCartClick}
+    className="flex items-center gap-2 text-grey hover:text-customBeige transition-colors"
+  >
+    <ShoppingCart className="w-5 h-5" />
+    <span className="hidden md:inline text-sm">Cart</span>
+  </button>
+</div>
+
           </div>
         </div>
       </header>

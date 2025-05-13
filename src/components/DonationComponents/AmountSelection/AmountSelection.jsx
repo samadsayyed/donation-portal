@@ -35,7 +35,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep,amount 
 
   const handleAmountClick = (amount) => {
     setSelectedAmount(amount);
-    setCustomAmount('');
+    setCustomAmount(amount);
     setAmountError('');
   };
 
@@ -121,9 +121,9 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep,amount 
               <button
                 key={amount}
                 onClick={() => handleAmountClick(amount)}
-                className={`flex items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 rounded-xl border-2 transition-all ${selectedAmount === amount
-                  ? 'border-customBeige bg-white text-grey shadow-[0_0_15px_rgba(196,146,97,0.3)]'
-                  : 'border-gray-200 bg-white text-grey hover:border-customBeige hover:shadow-[0_0_15px_rgba(196,146,97,0.2)]'
+                className={`flex items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 rounded-xl border-2 transition-all bg-primary  ${selectedAmount === amount
+                  ? 'border-customBeige bg-white text-primary shadow-[0_0_15px_rgba(196,146,97,0.3)]'
+                  : 'border-gray-200 bg-primary  text-white hover:border-customBeige hover:shadow-[0_0_15px_rgba(196,146,97,0.2)]'
                   }`}
               >
                 <PoundSterling className="w-4 h-4 sm:w-5 sm:h-5" />

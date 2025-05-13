@@ -196,7 +196,7 @@ const DonationPortal = ({ sessionId, setIsCartOpen, setRender, render }) => {
           <div className="mb-8">
   <div className="flex items-center justify-between mb-2">
     <span className="text-sm font-medium text-gray-700">
-      Step {step >= 3 ? step - 1 : step} of 4
+      Step {step >= 3 ? step - 2 : step} of 3
     </span>
     <span className="text-sm font-medium text-gray-700">
       {step === 1 && "Donation Period"}
