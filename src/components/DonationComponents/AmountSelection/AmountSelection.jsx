@@ -122,7 +122,7 @@ const AmountSelection = ({ onBack, prevData, handleAmountSelect, setStep,amount 
                 key={amount}
                 onClick={() => handleAmountClick(amount)}
                 className={`flex items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 md:p-4 rounded-xl border-2 transition-all bg-primary  ${selectedAmount === amount
-                  ? 'border-customBeige bg-[#04e4d8]  '
+                  ? 'border-customBeige bg-cyan-300  '
                   : 'border-gray-200 bg-primary  text-white hover:border-customBeige hover:shadow-[0_0_15px_rgba(196,146,97,0.2)]'
                   }`}
               >
