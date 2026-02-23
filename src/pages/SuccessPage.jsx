@@ -9,6 +9,7 @@ const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
   const data = searchParams.get('data');
   const [parsedData, setParsedData] = useState(null);
+  const [hasPushedPurchaseEvent, setHasPushedPurchaseEvent] = useState(false);
 
   // Dummy data for demonstration
   const dummyData = {
@@ -36,6 +37,44 @@ const PaymentSuccessPage = () => {
       }
     ]
   };
+
+  useEffect(() => {
+    if (!parsedData || hasPushedPurchaseEvent) return;
+
+    try {
+      const cartItems = parsedData.cart || [];
+      if (!Array.isArray(cartItems) || cartItems.length === 0) return;
+
+      // Prefer a precomputed total from checkout, fall back to sum of cart items
+      const computedTotal =
+        parsedData.donationTotal ??
+        cartItems.reduce(
+          (total, item) => total + parseFloat(item.donation_amount || 0) * (item.quantity || 1),
+          0
+        );
+
+      const numericValue = Number(parseFloat(computedTotal || 0).toFixed(2));
+      if (!Number.isFinite(numericValue) || numericValue <= 0) return;
+
+      // Use dummy transaction_id when testing without payment (no data in URL)
+      const transactionId = data
+        ? parsedData.reference_no || parsedData.referenceId || parsedData.reference || undefined
+        : 'TEST-TXN-DEMO-1234567890';
+
+      if (typeof window === 'undefined') return;
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'purchase',
+        transaction_id: transactionId,
+        value: Number(numericValue),
+        currency: 'GBP',
+      });
+      setHasPushedPurchaseEvent(true);
+    } catch (error) {
+      console.error('Failed to push purchase event:', error);
+    }
+  }, [parsedData, hasPushedPurchaseEvent, data]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
